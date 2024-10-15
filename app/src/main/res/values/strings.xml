@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Retro Snake</string>
+    <string name="high_scores">High Scores</string>
+    <string name="back">Back</string>
+</resources>
