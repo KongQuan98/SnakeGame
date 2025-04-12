@@ -97,7 +97,7 @@ fun SettingScreen(navController: NavController) {
                     .padding(top = 16.dp)
                     .clickable {
                         vibrate(context)
-                        navController.popBackStack() // Go back to the previous screen
+                        navController.popBackStack("settings", inclusive = true) // Go back to the previous screen
                     }
                     .padding(8.dp)
                     .background(Color.Black)

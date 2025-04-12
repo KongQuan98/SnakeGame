@@ -10,22 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,25 +28,27 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
+import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
+import com.example.snakegame.presentation.ui.screen.controloption.ArrowButtons
+import com.example.snakegame.presentation.ui.screen.controloption.Joystick
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.getCurrentDate
-import com.example.snakegame.presentation.ui.utility.vibrate
 import com.example.snakegame.presentation.viewmodel.HighScoreViewModel
 
 @Composable
 fun Snake(
     game: GameLogic,
     gameType: GameTypeEnum,
-    navController: NavController? = null
+    navController: NavController? = null,
+    buttonType: ButtonTypeEnum = ButtonTypeEnum.ARROW_BUTTON
 ) {
     val state = game.state.collectAsState(initial = null)
 
@@ -152,69 +143,15 @@ fun Snake(
                 }
             }
 
-            Buttons {
-                game.changeDirection(it, isPaused.value)
+            // game control button type
+            when (buttonType) {
+                ButtonTypeEnum.ARROW_BUTTON -> ArrowButtons {
+                    game.changeDirection(it, isPaused.value)
+                }
+                ButtonTypeEnum.JOYSTICK -> Joystick {
+                    game.changeDirection(it, isPaused.value)
+                }
             }
-        }
-    }
-}
-
-@Composable
-fun Buttons(onDirectionChange: (Pair<Int, Int>) -> Unit) {
-    val buttonSize = Modifier
-        .size(64.dp)
-    val context = LocalContext.current
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(24.dp)) {
-        Button(
-            onClick = {
-                onDirectionChange(Pair(0, -1))
-                vibrate(context)
-            },
-            modifier = buttonSize,
-            colors = ButtonDefaults.buttonColors(backgroundColor = LightGreen)
-        ) {
-            Icon(Icons.Default.KeyboardArrowUp, null)
-        }
-
-        Spacer(modifier = Modifier.height(12.dp)) // Add gap between rows
-
-        Row {
-            Button(
-                onClick = {
-                    onDirectionChange(Pair(-1, 0))
-                    vibrate(context)
-                },
-                modifier = buttonSize,
-                colors = ButtonDefaults.buttonColors(backgroundColor = LightGreen)
-            ) {
-                Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, null)
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            Spacer(modifier = buttonSize)
-            Spacer(modifier = Modifier.width(12.dp))
-            Button(
-                onClick = {
-                    onDirectionChange(Pair(1, 0))
-                    vibrate(context)
-                },
-                modifier = buttonSize,
-                colors = ButtonDefaults.buttonColors(backgroundColor = LightGreen)
-            ) {
-                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp)) // Add gap between rows
-
-        Button(
-            onClick = {
-                onDirectionChange(Pair(0, 1))
-                vibrate(context)
-            },
-            modifier = buttonSize,
-            colors = ButtonDefaults.buttonColors(backgroundColor = LightGreen)
-        ) {
-            Icon(Icons.Default.KeyboardArrowDown, null)
         }
     }
 }
