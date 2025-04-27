@@ -25,11 +25,11 @@ import com.example.snakegame.presentation.ui.utility.vibrate
 
 
 @Composable
-fun ArrowButtons(onDirectionChange: (Pair<Int, Int>) -> Unit) {
+fun ArrowButtons(modifier: Modifier = Modifier, onDirectionChange: (Pair<Int, Int>) -> Unit) {
     val buttonSize = Modifier
         .size(64.dp)
     val context = LocalContext.current
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(24.dp)) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.padding(24.dp)) {
         Button(
             onClick = {
                 onDirectionChange(Pair(0, -1))

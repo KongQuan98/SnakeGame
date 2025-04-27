@@ -1,18 +1,22 @@
 package com.example.snakegame.presentation.ui.screen.settingscreen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -28,32 +32,34 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
+import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
 import com.example.snakegame.presentation.ui.screen.MenuOption
 import com.example.snakegame.presentation.ui.screen.SnakeAnimation
+import com.example.snakegame.presentation.ui.screen.controloption.ArrowButtons
+import com.example.snakegame.presentation.ui.screen.controloption.Joystick
+import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.vibrate
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable
-fun SnakeSpeedScreen(navController: NavController) {
+fun ButtonTypeScreen(navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
-    var selectedSpeed by remember { mutableLongStateOf(0L) }
+    var selectedButtonType by remember { mutableStateOf(ButtonTypeEnum.ARROW_BUTTON) }
+    var showToast by remember { mutableStateOf(false) }
 
     val menuOptions = listOf(
-        "Super slow" to 200L,
-        "Slow" to 180L,
-        "Medium (Recommended)" to 150L,
-        "Fast" to 110L,
-        "Super fast" to 70L,
+        "Arrow Button" to ButtonTypeEnum.ARROW_BUTTON,
+        "Joystick" to ButtonTypeEnum.JOYSTICK,
     )
     val context = LocalContext.current
 
     val viewModel: SettingsViewModel = hiltViewModel()
-    val snakeSpeed by viewModel.snakeSpeed.observeAsState(initial = 150L)
-    selectedSpeed = snakeSpeed
+    val buttonType by viewModel.buttonType.observeAsState(initial = ButtonTypeEnum.ARROW_BUTTON)
+    selectedButtonType = buttonType
 
     menuOptions.forEachIndexed { index, pair ->
-        if (pair.second == snakeSpeed) {
+        if (pair.second == buttonType) {
             selectedIndex = index
         }
     }
@@ -72,14 +78,35 @@ fun SnakeSpeedScreen(navController: NavController) {
         ) {
             // Title
             Text(
-                text = "Snake Speed",
+                text = "Change Button Type",
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
                 ),
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                lineHeight = 45.sp
             )
+
+            Box(
+                Modifier
+                    .padding(start = 40.dp, end = 40.dp, top = 10.dp, bottom = 10.dp)
+                    .fillMaxHeight(0.4f)
+                    .fillMaxWidth()
+                    .width(300.dp)
+                    .background(DarkGreen)
+            ) {
+                when (selectedButtonType) {
+                    ButtonTypeEnum.ARROW_BUTTON -> ArrowButtons(Modifier.align(Alignment.Center)) {
+                        Unit
+                    }
+
+                    ButtonTypeEnum.JOYSTICK -> Joystick {
+                        Unit
+                    }
+                }
+            }
 
             Column(
                 Modifier
@@ -95,8 +122,9 @@ fun SnakeSpeedScreen(navController: NavController) {
                         onClick = {
                             vibrate(context)
                             selectedIndex = index
-                            option.second.let { speed ->
-                                viewModel.updateSnakeSpeed(speed)
+                            option.second.let { buttonType ->
+                                selectedButtonType = buttonType
+                                viewModel.updateButtonType(buttonType)
                             }
                         }
                     )
@@ -113,13 +141,29 @@ fun SnakeSpeedScreen(navController: NavController) {
                     .padding(top = 16.dp)
                     .clickable {
                         vibrate(context)
-                        navController.popBackStack() // Go back to the previous screen
+                        showToast = true
                     }
                     .padding(8.dp)
                     .background(Color.Black)
                     .padding(horizontal = 32.dp, vertical = 8.dp),
                 textAlign = TextAlign.Center
             )
+
+            when (showToast) {
+                true -> {
+                    Toast.makeText(
+                        context,
+                        "${menuOptions[selectedIndex].first} is selected",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    navController.popBackStack() // Go back to the previous screen
+                    showToast = false
+                }
+
+                else -> {
+                    Unit
+                }
+            }
         }
     }
 }

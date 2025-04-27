@@ -97,7 +97,7 @@ fun Joystick(
             val canvasHeight = size.height
             val center = Offset(canvasWidth / 2f, canvasHeight / 2f)
             val baseRadius = min(canvasWidth, canvasHeight) / 3f
-            val hatRadius = min(canvasWidth, canvasHeight) / 5f
+            val hatRadius = min(canvasWidth, canvasHeight) / 6f
 
             // Draw the base (background circle).
             drawCircle(

@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.datamodel.Settings
 import com.example.snakegame.presentation.ui.screen.GameLogic
@@ -20,6 +21,9 @@ import com.example.snakegame.presentation.ui.screen.MainMenu
 import com.example.snakegame.presentation.ui.screen.Snake
 import com.example.snakegame.presentation.ui.screen.SpecialModeScreen
 import com.example.snakegame.presentation.ui.screen.WallsSelectionScreen
+import com.example.snakegame.presentation.ui.screen.settingscreen.ButtonTypeScreen
+import com.example.snakegame.presentation.ui.screen.settingscreen.LanguageScreen
+import com.example.snakegame.presentation.ui.screen.settingscreen.MusicVibrationControlScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.SettingScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.SnakeSpeedScreen
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
@@ -35,12 +39,13 @@ fun AppNavigation() {
     val snakeSpeed by settingsViewModel.snakeSpeed.observeAsState(initial = 150L)
     val vibrationEnabled by settingsViewModel.vibrationEnabled.observeAsState(initial = true)
     val musicEnabled by settingsViewModel.musicEnabled.observeAsState(initial = true)
+    val buttonType by settingsViewModel.buttonType.observeAsState(initial = ButtonTypeEnum.ARROW_BUTTON)
     val language by settingsViewModel.language.observeAsState(initial = "en")
 
     val settings = Settings(
         snakeSpeed,
         vibrationEnabled,
-        musicEnabled
+        musicEnabled,
     )
 
     NavHost(navController = navController, startDestination = "main_menu") {
@@ -66,7 +71,8 @@ fun AppNavigation() {
             Snake(
                 game = game,
                 gameType = GameTypeEnum.SNAKE_GAME_CLASSIC,
-                navController = navController
+                navController = navController,
+                buttonType = buttonType
             )
         }
 
@@ -88,11 +94,15 @@ fun AppNavigation() {
         }
 
         composable("settings_music_vibration") {
-            SettingScreen(navController = navController)
+            MusicVibrationControlScreen(navController = navController)
+        }
+
+        composable("settings_change_button_type") {
+            ButtonTypeScreen(navController = navController)
         }
 
         composable("settings_language") {
-            SettingScreen(navController = navController)
+            LanguageScreen(navController = navController)
         }
 
         composable("Exit") {
@@ -122,7 +132,8 @@ fun AppNavigation() {
             Snake(
                 game = game,
                 gameType = GameTypeEnum.SNAKE_GAME_WALLS,
-                navController = navController
+                navController = navController,
+                buttonType = buttonType
             )
         }
 
@@ -139,7 +150,8 @@ fun AppNavigation() {
             Snake(
                 game = game,
                 gameType = GameTypeEnum.SNAKE_GAME_MAZE,
-                navController = navController
+                navController = navController,
+                buttonType = buttonType
             )
         }
 
@@ -156,7 +168,8 @@ fun AppNavigation() {
             Snake(
                 game = game,
                 gameType = GameTypeEnum.SNAKE_GAME_SPEED,
-                navController = navController
+                navController = navController,
+                buttonType = buttonType
             )
         }
     }
