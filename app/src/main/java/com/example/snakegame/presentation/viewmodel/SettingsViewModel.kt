@@ -3,6 +3,7 @@ package com.example.snakegame.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
 import com.example.snakegame.service.repo.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ class SettingsViewModel @Inject constructor(
     val vibrationEnabled = repository.vibrationEnabled.asLiveData()
     val musicEnabled = repository.musicEnabled.asLiveData()
     val language = repository.language.asLiveData()
+    val buttonType = repository.buttonType.asLiveData()
 
     fun updateSnakeSpeed(speed: Long) {
         viewModelScope.launch {
@@ -39,6 +41,12 @@ class SettingsViewModel @Inject constructor(
     fun updateLanguage(language: String) {
         viewModelScope.launch {
             repository.updateLanguage(language)
+        }
+    }
+
+    fun updateButtonType(buttonType: ButtonTypeEnum) {
+        viewModelScope.launch {
+            repository.updateButtonType(buttonType)
         }
     }
 }

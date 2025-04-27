@@ -36,6 +36,7 @@ fun SettingScreen(navController: NavController) {
 
     val menuOptions = listOf(
         "Snake Speed" to "settings_snake_speed",
+        "Change Button Type" to "settings_change_button_type",
         "Music & Vibration" to "settings_music_vibration",
         "Language" to "settings_language",
     )
@@ -97,7 +98,10 @@ fun SettingScreen(navController: NavController) {
                     .padding(top = 16.dp)
                     .clickable {
                         vibrate(context)
-                        navController.popBackStack() // Go back to the previous screen
+                        navController.popBackStack(
+                            "settings",
+                            inclusive = true
+                        ) // Go back to the previous screen
                     }
                     .padding(8.dp)
                     .background(Color.Black)

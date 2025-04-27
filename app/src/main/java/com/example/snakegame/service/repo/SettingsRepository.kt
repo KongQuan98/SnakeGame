@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -21,6 +22,7 @@ class SettingsRepository @Inject constructor(
         val VIBRATION = booleanPreferencesKey("vibration_enabled")
         val MUSIC = booleanPreferencesKey("music_enabled")
         val LANGUAGE = stringPreferencesKey("language")
+        val BUTTON_TYPE = stringPreferencesKey("button_type")
     }
 
     val snakeSpeed: Flow<Long> = dataStore.data.map { preferences ->
@@ -37,6 +39,12 @@ class SettingsRepository @Inject constructor(
 
     val language: Flow<String> = dataStore.data.map { preferences ->
         preferences[PreferencesKeys.LANGUAGE] ?: "en" // Default language
+    }
+
+    val buttonType: Flow<ButtonTypeEnum> = dataStore.data.map { preferences ->
+        val buttonType =
+            preferences[PreferencesKeys.BUTTON_TYPE] ?: ButtonTypeEnum.ARROW_BUTTON.name
+        ButtonTypeEnum.valueOf(buttonType)
     }
 
     suspend fun updateSnakeSpeed(speed: Long) {
@@ -60,6 +68,12 @@ class SettingsRepository @Inject constructor(
     suspend fun updateLanguage(language: String) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.LANGUAGE] = language
+        }
+    }
+
+    suspend fun updateButtonType(buttonType: ButtonTypeEnum) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.BUTTON_TYPE] = buttonType.name
         }
     }
 }
