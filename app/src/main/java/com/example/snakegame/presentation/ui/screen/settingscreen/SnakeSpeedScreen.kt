@@ -1,5 +1,6 @@
 package com.example.snakegame.presentation.ui.screen.settingscreen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,6 +40,7 @@ import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 fun SnakeSpeedScreen(navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
     var selectedSpeed by remember { mutableLongStateOf(0L) }
+    var showToast by remember { mutableStateOf(false) }
 
     val menuOptions = listOf(
         "Super slow" to 200L,
@@ -113,6 +116,7 @@ fun SnakeSpeedScreen(navController: NavController) {
                     .padding(top = 16.dp)
                     .clickable {
                         vibrate(context)
+                        showToast = true
                         navController.popBackStack() // Go back to the previous screen
                     }
                     .padding(8.dp)
@@ -120,6 +124,22 @@ fun SnakeSpeedScreen(navController: NavController) {
                     .padding(horizontal = 32.dp, vertical = 8.dp),
                 textAlign = TextAlign.Center
             )
+
+            when (showToast) {
+                true -> {
+                    Toast.makeText(
+                        context,
+                        "${menuOptions[selectedIndex].first} is selected",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    navController.popBackStack() // Go back to the previous screen
+                    showToast = false
+                }
+
+                else -> {
+                    Unit
+                }
+            }
         }
     }
 }
