@@ -46,7 +46,6 @@ import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 fun ButtonTypeScreen(navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
     var selectedButtonType by remember { mutableStateOf(ButtonTypeEnum.ARROW_BUTTON) }
-    var showToast by remember { mutableStateOf(false) }
 
     val menuOptions = listOf(
         "Arrow Button" to ButtonTypeEnum.ARROW_BUTTON,
@@ -78,6 +77,7 @@ fun ButtonTypeScreen(navController: NavController) {
         ) {
             // Title
             Text(
+                modifier = Modifier.padding(horizontal = 40.dp),
                 text = "Change Button Type",
                 color = Color.Black,
                 fontFamily = FontFamily(
@@ -125,6 +125,11 @@ fun ButtonTypeScreen(navController: NavController) {
                             option.second.let { buttonType ->
                                 selectedButtonType = buttonType
                                 viewModel.updateButtonType(buttonType)
+                                Toast.makeText(
+                                    context,
+                                    "${menuOptions[selectedIndex].first} is selected",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     )
@@ -141,29 +146,13 @@ fun ButtonTypeScreen(navController: NavController) {
                     .padding(top = 16.dp)
                     .clickable {
                         vibrate(context)
-                        showToast = true
+                        navController.popBackStack()
                     }
                     .padding(8.dp)
                     .background(Color.Black)
                     .padding(horizontal = 32.dp, vertical = 8.dp),
                 textAlign = TextAlign.Center
             )
-
-            when (showToast) {
-                true -> {
-                    Toast.makeText(
-                        context,
-                        "${menuOptions[selectedIndex].first} is selected",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    navController.popBackStack() // Go back to the previous screen
-                    showToast = false
-                }
-
-                else -> {
-                    Unit
-                }
-            }
         }
     }
 }

@@ -4,3 +4,8 @@ enum class ButtonTypeEnum {
     ARROW_BUTTON,
     JOYSTICK
 }
+
+enum class MusicVibrationEnum {
+    MUSIC,
+    VIBRATION,
+}

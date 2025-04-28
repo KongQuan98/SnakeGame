@@ -1,16 +1,22 @@
 package com.example.snakegame.presentation.ui.screen.settingscreen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -23,24 +29,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
-import com.example.snakegame.presentation.ui.screen.MenuOption
+import com.example.snakegame.presentation.datamodel.MusicVibrationEnum
 import com.example.snakegame.presentation.ui.screen.SnakeAnimation
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.vibrate
+import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable
 fun MusicVibrationControlScreen(navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedMusicEnabled by remember { mutableStateOf(true) }
+    var selectedVibrationEnabled by remember { mutableStateOf(true) }
 
     val menuOptions = listOf(
-        "Snake Speed" to "settings_snake_speed",
-        "Language" to "settings_language",
-        "Music & Vibration" to "settings_music_vibration",
+        MusicVibrationEnum.MUSIC,
+        MusicVibrationEnum.VIBRATION,
     )
-
     val context = LocalContext.current
+
+    val viewModel: SettingsViewModel = hiltViewModel()
+    val musicEnabled by viewModel.musicEnabled.observeAsState(initial = true)
+    val vibrationEnabled by viewModel.vibrationEnabled.observeAsState(initial = true)
+
+    selectedMusicEnabled = musicEnabled
+    selectedVibrationEnabled = vibrationEnabled
 
     Box(
         Modifier
@@ -56,39 +71,99 @@ fun MusicVibrationControlScreen(navController: NavController) {
         ) {
             // Title
             Text(
-                text = "Settings",
+                modifier = Modifier.padding(horizontal = 40.dp),
+                text = "Music & Vibration",
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
                 ),
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                lineHeight = 45.sp
             )
 
             Column(
                 Modifier
-                    .padding(top = 10.dp, start = 40.dp, end = 40.dp, bottom = 40.dp)
+                    .padding(40.dp)
                     .border(2.dp, Color.Black), // Border for the main menu
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Menu Options
                 menuOptions.forEachIndexed { index, option ->
-                    MenuOption(
-                        text = option.first,
-                        isSelected = index == selectedIndex,
-                        onClick = {
-                            vibrate(context)
-                            selectedIndex = index
-                            option.second.let { route ->
-                                navController.navigate(route)
-                            }
+                    val isSelected = index == selectedIndex
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(if (isSelected) Color.Black else LightGreen)
+                            .padding(8.dp)
+                            .clickable(onClick = {
+                                vibrate(context)
+                                selectedIndex = index
+                                when (option) {
+                                    MusicVibrationEnum.MUSIC -> {
+                                        selectedMusicEnabled = !selectedMusicEnabled
+                                        viewModel.updateMusicEnabled(selectedMusicEnabled)
+                                        val onOff = if (selectedMusicEnabled) "On" else "Off"
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "Music is switched $onOff",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
+                                    }
+
+                                    MusicVibrationEnum.VIBRATION -> {
+                                        selectedVibrationEnabled = !selectedVibrationEnabled
+                                        viewModel.updateVibrationEnabled(selectedVibrationEnabled)
+                                        val onOff = if (selectedVibrationEnabled) "On" else "Off"
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "Vibration is switched $onOff",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
+                                    }
+                                }
+                            }),
+                    ) {
+                        val status = when (option) {
+                            MusicVibrationEnum.MUSIC -> if (selectedMusicEnabled) "On" else "Off"
+                            MusicVibrationEnum.VIBRATION -> if (selectedVibrationEnabled) "On" else "Off"
                         }
-                    )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = option.name,
+                                color = if (isSelected) LightGreen else Color.Black,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily(Font(R.font.nokia_font)),
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Start
+                            )
+
+                            Text(
+                                text = status,
+                                color = if (isSelected) LightGreen else Color.Black,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily(Font(R.font.nokia_font)),
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                    }
                 }
             }
 
             Text(
-                text = "Back",
+                text = "Done",
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -97,7 +172,7 @@ fun MusicVibrationControlScreen(navController: NavController) {
                     .padding(top = 16.dp)
                     .clickable {
                         vibrate(context)
-                        navController.popBackStack() // Go back to the previous screen
+                        navController.popBackStack()
                     }
                     .padding(8.dp)
                     .background(Color.Black)
@@ -105,7 +180,5 @@ fun MusicVibrationControlScreen(navController: NavController) {
                 textAlign = TextAlign.Center
             )
         }
-
-
     }
 }
