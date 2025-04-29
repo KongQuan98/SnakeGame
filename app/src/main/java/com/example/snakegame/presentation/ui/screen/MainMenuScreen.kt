@@ -34,8 +34,8 @@ import androidx.navigation.NavController
 import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.ui.utility.buildCompleteSnakePath
-import com.example.snakegame.presentation.ui.utility.vibrate
 import kotlinx.coroutines.delay
 import kotlin.system.exitProcess
 

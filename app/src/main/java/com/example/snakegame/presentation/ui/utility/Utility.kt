@@ -9,22 +9,28 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 // vibrate for onclick
-fun vibrate(context: Context, vibrationLevel: Long = 50) {
-    val vibrator = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-        val vibratorManager =
-            context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-        vibratorManager.defaultVibrator
-    } else {
-        @Suppress("DEPRECATION")
-        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    }
-    vibrator.vibrate(
-        VibrationEffect.createOneShot(
-            vibrationLevel,
-            VibrationEffect.DEFAULT_AMPLITUDE
+object VibrationManager {
+    var isSettingVibrationEnabled = true
+    fun vibrate(context: Context, vibrationLevel: Long = 50) {
+        if (!isSettingVibrationEnabled) return
+
+        val vibrator = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            val vibratorManager =
+                context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+        vibrator.vibrate(
+            VibrationEffect.createOneShot(
+                vibrationLevel,
+                VibrationEffect.DEFAULT_AMPLITUDE
+            )
         )
-    )
+    }
 }
+
 
 // snake animation path
 fun buildCompleteSnakePath(

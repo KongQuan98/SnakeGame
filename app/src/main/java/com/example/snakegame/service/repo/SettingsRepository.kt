@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
+import com.example.snakegame.presentation.ui.utility.VibrationManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -54,6 +55,7 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun updateVibrationEnabled(enabled: Boolean) {
+        VibrationManager.isSettingVibrationEnabled = enabled
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.VIBRATION] = enabled
         }

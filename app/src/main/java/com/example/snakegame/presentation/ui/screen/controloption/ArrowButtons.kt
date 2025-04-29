@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.vibrate
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 
 
 @Composable

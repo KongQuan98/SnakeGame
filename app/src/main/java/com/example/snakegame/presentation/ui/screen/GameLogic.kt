@@ -4,9 +4,9 @@ import SoundManager
 import android.content.Context
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.datamodel.Settings
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.ui.utility.generateRandomFood
 import com.example.snakegame.presentation.ui.utility.generateWallsForMaze
-import com.example.snakegame.presentation.ui.utility.vibrate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -249,7 +249,7 @@ class GameLogic(
     }
 
     private fun vibrateIfEnabled(vibrationLevel: Long) {
-        if (settings.musicEnabled) {
+        if (settings.vibrationEnabled) {
             vibrate(context, vibrationLevel)
         }
     }

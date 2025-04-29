@@ -32,7 +32,7 @@ import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.screen.MenuOption
 import com.example.snakegame.presentation.ui.screen.SnakeAnimation
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.vibrate
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable

@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.vibrate
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 
 @Composable
 fun WallsSelectionScreen(navController: NavController) {

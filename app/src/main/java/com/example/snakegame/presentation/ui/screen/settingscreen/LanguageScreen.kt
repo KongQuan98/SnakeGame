@@ -28,7 +28,7 @@ import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.screen.MenuOption
 import com.example.snakegame.presentation.ui.screen.SnakeAnimation
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.vibrate
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 
 @Composable
 fun LanguageScreen(navController: NavController) {
@@ -83,7 +83,8 @@ fun LanguageScreen(navController: NavController) {
                 }
             }
 
-            Text(text = "Back",
+            Text(
+                text = "Back",
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

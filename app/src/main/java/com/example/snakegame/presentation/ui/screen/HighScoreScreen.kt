@@ -34,7 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.vibrate
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.HighScoreViewModel
 
 // Data model to represent a high score

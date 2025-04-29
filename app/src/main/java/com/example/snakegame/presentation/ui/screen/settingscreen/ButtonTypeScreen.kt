@@ -39,7 +39,7 @@ import com.example.snakegame.presentation.ui.screen.controloption.ArrowButtons
 import com.example.snakegame.presentation.ui.screen.controloption.Joystick
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.vibrate
+import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable
