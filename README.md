@@ -47,25 +47,6 @@ A modern Android implementation of the classic Snake game, built with Kotlin and
 - Clean code structure
 - Material Design 3 components
 
-## Project Structure
-
-```
-app/
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/example/snakegame/
-│       │       ├── presentation/
-│       │       │   ├── ui/
-│       │       │   │   ├── screen/
-│       │       │   │   ├── theme/
-│       │       │   │   └── utility/
-│       │       │   ├── viewmodel/
-│       │       │   └── datamodel/
-│       │       └── service/
-│       └── res/
-```
-
 ## Getting Started
 
 1. Clone the repository
