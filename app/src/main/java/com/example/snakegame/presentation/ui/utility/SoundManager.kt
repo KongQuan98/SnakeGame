@@ -22,7 +22,7 @@ class SoundManager(context: Context) {
         soundIds["eat"] = soundPool.load(context, R.raw.eat_sound, 1)
         soundIds["bonk_body"] = soundPool.load(context, R.raw.bonk_body, 1)
         soundIds["bonk_wall"] = soundPool.load(context, R.raw.bonk_wall, 1)
-
+        soundIds["big_food"] = soundPool.load(context, R.raw.big_food_ding, 1)
     }
 
     // Play sound by name

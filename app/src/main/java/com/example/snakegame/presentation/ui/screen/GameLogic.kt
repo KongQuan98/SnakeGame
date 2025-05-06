@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.math.round
 
 data class State(
     val food: Pair<Int, Int>,
@@ -24,7 +25,9 @@ data class State(
     val score: Int = 0,
     val speed: Long = 150L,
     val isGameOver: Boolean = false,
-    val isPause: Boolean = false
+    val isPause: Boolean = false,
+    val foodSpawnTime: Long = System.currentTimeMillis(),
+    val isBonusActive: Boolean = false
 )
 
 class GameLogic(
@@ -72,6 +75,8 @@ class GameLogic(
             var score = 0
             var mazeLevel = 1
             var snake: List<Pair<Int, Int>> // Initial starting position for the snake
+            var counter = 0
+            var foodSpawnTime = 0L
 
             if (gameType == GameTypeEnum.SNAKE_GAME_WALLS) {
                 mutableState.update {
@@ -102,7 +107,7 @@ class GameLogic(
                                 ) {
                                     // Wall collision check
                                     if (it.walls.contains(Pair(newX, newY))) {
-                                        vibrateIfEnabled(200)
+                                        vibrate(context, 200)
                                         playSoundIfEnabled("bonk_wall")
                                         stopGame()
                                         return@update it.copy(isGameOver = true, score = score)
@@ -113,14 +118,30 @@ class GameLogic(
                             }
                         }
 
+                        val currentTime = System.currentTimeMillis()
+                        val timeRemaining = currentTime - foodSpawnTime
+                        val isWithinBonusTime = timeRemaining <= BONUS_TIME_LIMIT
+
                         // Increase score when snake eats food
                         if (newPosition == it.food) {
-                            score++
+                            if (counter == 5) {
+                                counter = 0
+                            }
+                            counter++
+                            if (counter == 5) {
+                                playSoundIfEnabled("big_food")
+                                foodSpawnTime = System.currentTimeMillis()
+                            }
+                            score += if (it.isBonusActive && isWithinBonusTime)
+                                round(((BONUS_TIME_LIMIT - timeRemaining) * MULTIPLIERS_PER_SECOND)).toInt()
+                            else
+                                POINTS
+
                             playSoundIfEnabled("eat")
                             snakeLength++
 
                             // Increase maze level and reset snake if score is a multiple of 5
-                            if (gameType == GameTypeEnum.SNAKE_GAME_MAZE && score % 5 == 0) {
+                            if (gameType == GameTypeEnum.SNAKE_GAME_MAZE && score % 25 == 0) {
                                 mazeLevel++
                                 isPaused.value = true
                                 pauseGame()
@@ -140,7 +161,7 @@ class GameLogic(
 
                             // Increase speed for SPEED mode
                             if (gameType == GameTypeEnum.SNAKE_GAME_SPEED) {
-                                if (speed > 50 && score % 5 == 0) {
+                                if (speed > 50 && score % 25 == 0) {
                                     speed -= 30
                                 }
                             }
@@ -148,7 +169,7 @@ class GameLogic(
 
                         // Game over if snake hits itself
                         if (it.snake.contains(newPosition)) {
-                            vibrateIfEnabled(200)
+                            vibrate(context, 200)
                             playSoundIfEnabled("bonk_body")
                             stopGame()
                             return@update it.copy(isGameOver = true, score = score)
@@ -165,7 +186,9 @@ class GameLogic(
                             score = score,
                             speed = speed,
                             walls = if (gameType == GameTypeEnum.SNAKE_GAME_MAZE)
-                                generateWallsForMaze(mazeLevel) else generateWallsForMaze(wallsLevel)
+                                generateWallsForMaze(mazeLevel) else generateWallsForMaze(wallsLevel),
+                            foodSpawnTime = foodSpawnTime,
+                            isBonusActive = counter == 5
                         )
                     }
                 } else {
@@ -248,13 +271,10 @@ class GameLogic(
         }
     }
 
-    private fun vibrateIfEnabled(vibrationLevel: Long) {
-        if (settings.vibrationEnabled) {
-            vibrate(context, vibrationLevel)
-        }
-    }
-
     companion object {
         const val BOARD_SIZE = 20
+        const val POINTS = 5
+        const val MULTIPLIERS_PER_SECOND = 0.05
+        const val BONUS_TIME_LIMIT = 5000L
     }
 }

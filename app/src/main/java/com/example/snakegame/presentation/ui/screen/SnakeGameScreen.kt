@@ -10,19 +10,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -42,6 +49,7 @@ import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.getCurrentDate
 import com.example.snakegame.presentation.viewmodel.HighScoreViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun Snake(
@@ -87,6 +95,10 @@ fun Snake(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             state.value?.let {
                 Score(it, gameType)
+                BonusCountdownBar(
+                    foodSpawnTime = it.foodSpawnTime,
+                    isBonusActive = it.isBonusActive
+                )
                 Board(it, game, gameType)
 
                 // Show SaveHighScoreDialog only if current score is greater than high score
@@ -190,7 +202,7 @@ fun Score(state: State, gameType: GameTypeEnum) {
 
 @Composable
 fun Board(state: State, game: GameLogic, gameType: GameTypeEnum) {
-    val isBigFood = state.score % 5 == 0 && state.score > 0
+    val isBigFood = state.isBonusActive
 
     BoxWithConstraints(
         Modifier
@@ -270,6 +282,33 @@ fun Board(state: State, game: GameLogic, gameType: GameTypeEnum) {
                     .offset(x = tileSize * segment.first, y = tileSize * segment.second)
                     .size(tileSize)
                     .background(DarkGreen)
+            )
+        }
+    }
+}
+
+@Composable
+fun BonusCountdownBar(foodSpawnTime: Long, isBonusActive: Boolean) {
+    if (isBonusActive) {
+        val progress by produceState(initialValue = 1f) {
+            while (true) {
+                val elapsed = System.currentTimeMillis() - foodSpawnTime
+                val remaining = (GameLogic.BONUS_TIME_LIMIT - elapsed).coerceAtLeast(0L)
+                value = remaining / GameLogic.BONUS_TIME_LIMIT.toFloat()
+                delay(100)
+            }
+        }
+
+        if (progress > 0f) {
+            LinearProgressIndicator(
+                progress = progress,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+                color = Color.Red,
+                backgroundColor = Color.LightGray
             )
         }
     }

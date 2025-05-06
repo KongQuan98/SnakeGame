@@ -34,7 +34,7 @@ fun SpecialModeScreen(navController: NavController) {
 
     val menuOptions = listOf(
         "Walls Challenge" to "snake_game_walls_selection",
-        "Maze Challenge" to "snake_game_maze",
+//        "Maze Challenge" to "snake_game_maze",
         "Speed Challenge" to "snake_game_speed",
     )
 
