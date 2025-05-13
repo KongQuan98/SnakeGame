@@ -18,7 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -131,6 +132,19 @@ fun Snake(
                             isPaused.value = false
                             game.resetGame()
                         },
+                        gameType = gameType,
+                        onBackToSpecialGameMenu = {
+                            isGameOver.value = false
+                            isPaused.value = false
+                            val navigateLocation = when {
+                                gameType == GameTypeEnum.SNAKE_GAME_WALLS -> "snake_game_walls_selection"
+                                gameType == GameTypeEnum.SNAKE_GAME_SPEED -> "special_mode"
+                                else -> "main_menu"
+                            }
+                            navController?.navigate(navigateLocation) {
+                                popUpTo(navigateLocation) { inclusive = true }
+                            }
+                        },
                         onBackToMainMenu = {
                             isGameOver.value = false
                             isPaused.value = false
@@ -160,6 +174,7 @@ fun Snake(
                 ButtonTypeEnum.ARROW_BUTTON -> ArrowButtons {
                     game.changeDirection(it, isPaused.value)
                 }
+
                 ButtonTypeEnum.JOYSTICK -> Joystick {
                     game.changeDirection(it, isPaused.value)
                 }
@@ -308,8 +323,15 @@ fun BonusCountdownBar(foodSpawnTime: Long, isBonusActive: Boolean) {
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(4.dp)),
                 color = Color.Red,
-                backgroundColor = Color.LightGray
+                backgroundColor = LightGreen
             )
         }
+    } else {
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp),
+            color = DarkGreen
+        )
     }
 }

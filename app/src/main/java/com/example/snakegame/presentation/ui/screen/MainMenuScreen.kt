@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -30,12 +31,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.ui.utility.buildCompleteSnakePath
+import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.delay
 import kotlin.system.exitProcess
 
@@ -124,6 +127,10 @@ fun MenuOption(text: String, isSelected: Boolean, onClick: () -> Unit) {
 
 @Composable
 fun SnakeAnimation() {
+
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
+    val snakeSpeed by settingsViewModel.snakeSpeed.observeAsState(initial = 150L)
+
     // Define the size of the snake
     val snakeLength = 50
     val snakeSize = 16.dp
@@ -145,7 +152,7 @@ fun SnakeAnimation() {
 
         // Infinite loop to keep the snake circulating
         while (true) {
-            delay(10L) // Delay between snake's position updates
+            delay(snakeSpeed - 60) // Delay between snake's position updates
 
             // Move the snake along the path
             val currentHeadIndex = fullPath.indexOf(snakePositions.first())

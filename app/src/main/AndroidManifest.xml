@@ -17,6 +17,7 @@
         <activity
             android:name="com.example.snakegame.MainMenuActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.SnakeGame">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

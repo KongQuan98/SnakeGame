@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.snakegame.R
+import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 
@@ -27,6 +28,8 @@ fun GameOverDialog(
     onSeeHighScore: () -> Unit,
     onDismiss: () -> Unit,
     isPaused: Boolean,
+    gameType: GameTypeEnum = GameTypeEnum.SNAKE_GAME_CLASSIC,
+    onBackToSpecialGameMenu: () -> Unit,
     onContinue: () -> Unit
 ) {
     val context = LocalContext.current
@@ -102,6 +105,31 @@ fun GameOverDialog(
                         ),
                         color = LightGreen,
                     )
+                }
+
+                if (gameType == GameTypeEnum.SNAKE_GAME_WALLS || gameType == GameTypeEnum.SNAKE_GAME_SPEED) {
+                    val buttonText = when {
+                        gameType == GameTypeEnum.SNAKE_GAME_WALLS -> "Walls Selection"
+                        else -> "Back to Special Mode"
+                    }
+                    Button(
+                        onClick = {
+                            onBackToSpecialGameMenu()
+                            vibrate(context)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            text = buttonText,
+                            fontFamily = FontFamily(
+                                Font(R.font.nokia_font)
+                            ),
+                            color = LightGreen,
+                        )
+                    }
                 }
 
                 // Back to Main Menu Button

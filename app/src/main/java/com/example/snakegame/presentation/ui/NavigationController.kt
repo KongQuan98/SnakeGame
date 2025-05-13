@@ -26,6 +26,7 @@ import com.example.snakegame.presentation.ui.screen.settingscreen.LanguageScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.MusicVibrationControlScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.SettingScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.SnakeSpeedScreen
+import com.example.snakegame.presentation.ui.utility.VibrationManager
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 import kotlin.system.exitProcess
 
@@ -48,6 +49,8 @@ fun AppNavigation() {
         musicEnabled,
     )
 
+    VibrationManager.isSettingVibrationEnabled = vibrationEnabled
+
     NavHost(navController = navController, startDestination = "main_menu") {
         // Main Menu Screen
         composable("main_menu") {
@@ -58,7 +61,6 @@ fun AppNavigation() {
         composable("snake_game") {
             // Use remember to instantiate Game with a CoroutineScope
             val scope = rememberCoroutineScope()
-            println("kqkqkqkq" + settings.snakeSpeed)
             val game =
                 remember {
                     GameLogic(

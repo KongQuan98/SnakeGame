@@ -23,7 +23,7 @@ data class State(
     val snake: List<Pair<Int, Int>>,
     val walls: List<Pair<Int, Int>> = emptyList(), // Add walls to the state
     val score: Int = 0,
-    val speed: Long = 150L,
+    val speed: Long = 200L,
     val isGameOver: Boolean = false,
     val isPause: Boolean = false,
     val foodSpawnTime: Long = System.currentTimeMillis(),
@@ -130,6 +130,7 @@ class GameLogic(
                             counter++
                             if (counter == 5) {
                                 playSoundIfEnabled("big_food")
+                                vibrate(context, 200)
                                 foodSpawnTime = System.currentTimeMillis()
                             }
                             score += if (it.isBonusActive && isWithinBonusTime)
@@ -161,7 +162,7 @@ class GameLogic(
 
                             // Increase speed for SPEED mode
                             if (gameType == GameTypeEnum.SNAKE_GAME_SPEED) {
-                                if (speed > 50 && score % 25 == 0) {
+                                if (speed >= 50 && it.isBonusActive) {
                                     speed -= 30
                                 }
                             }

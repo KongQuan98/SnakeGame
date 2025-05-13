@@ -37,8 +37,8 @@ import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable
 fun SnakeSpeedScreen(navController: NavController) {
-    var selectedIndex by remember { mutableIntStateOf(0) }
-    var selectedSpeed by remember { mutableLongStateOf(0L) }
+    var selectedIndex by remember { mutableIntStateOf(2) }
+    var selectedSpeed by remember { mutableLongStateOf(150L) }
 
     val menuOptions = listOf(
         "Super slow" to 200L,
