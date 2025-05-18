@@ -2,6 +2,7 @@ package com.example.snakegame.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.ui.screen.HighScore
 import com.example.snakegame.service.repo.HighScoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,9 +13,35 @@ import javax.inject.Inject
 class HighScoreViewModel @Inject constructor(
     private val repository: HighScoreRepository
 ) : ViewModel() {
-    fun addHighScore(name: String, score: Int, date: String) {
+    fun addHighScore(
+        name: String,
+        score: Int,
+        wallsLevel: String? = null,
+        maxSpeedReached: String? = null,
+        gameType: GameTypeEnum
+    ) {
         viewModelScope.launch {
-            repository.insert(HighScore(name = name, score = score, date = date))
+            when (gameType) {
+                GameTypeEnum.SNAKE_GAME_CLASSIC -> repository.insert(
+                    HighScore(
+                        name = name, score = score
+                    )
+                )
+
+                GameTypeEnum.SNAKE_GAME_WALLS -> repository.insertWallsHighScore(
+                    HighScore(
+                        name = name, score = score, wallsLevel = wallsLevel
+                    )
+                )
+
+                GameTypeEnum.SNAKE_GAME_SPEED -> repository.insertSpeedHighScore(
+                    HighScore(
+                        name = name, score = score, maxSpeedReached = maxSpeedReached
+                    )
+                )
+
+                else -> Unit
+            }
         }
     }
 
@@ -22,9 +49,12 @@ class HighScoreViewModel @Inject constructor(
         return repository.getAllHighScores()
     }
 
-    suspend fun getHighestScores(): HighScore? {
-        val list = repository.getAllHighScores()
-        return list.maxByOrNull { it.score }
+    suspend fun getWallsHighScores(): List<HighScore> {
+        return repository.getWallsHighScores()
+    }
+
+    suspend fun getSpeedHighScores(): List<HighScore> {
+        return repository.getSpeedHighScores()
     }
 
     fun clearAllRecords() {

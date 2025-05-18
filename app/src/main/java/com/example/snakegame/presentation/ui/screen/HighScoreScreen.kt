@@ -1,28 +1,36 @@
 package com.example.snakegame.presentation.ui.screen
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,23 +41,46 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
+import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.viewmodel.GameLogicViewModel
 import com.example.snakegame.presentation.viewmodel.HighScoreViewModel
 
 // Data model to represent a high score
-data class HighScore(val name: String, val score: Int, val date: String)
+data class HighScore(
+    val name: String,
+    val score: Int,
+    val wallsLevel: String? = null,
+    val maxSpeedReached: String? = null
+)
 
 @Composable
 fun HighScoreScreen(navController: NavController) {
     val context = LocalContext.current
     val highScores = remember { mutableStateListOf<HighScore>() }
+    val wallsHighScore = remember { mutableStateListOf<HighScore>() }
+    val speedHighScore = remember { mutableStateListOf<HighScore>() }
     val viewModel: HighScoreViewModel = hiltViewModel()
+    val gameViewModel: GameLogicViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
         highScores.clear()
         highScores.addAll(viewModel.getHighScores())
+
+        wallsHighScore.clear()
+        wallsHighScore.addAll(viewModel.getWallsHighScores())
+
+        speedHighScore.clear()
+        speedHighScore.addAll(viewModel.getSpeedHighScores())
     }
+
+    var selected by remember { mutableIntStateOf(0) }
+    val options = listOf(
+        "Classic",
+        "Walls",
+        "Speed"
+    )
 
     // Main layout with the title and the high score table
     Box(
@@ -76,8 +107,24 @@ fun HighScoreScreen(navController: NavController) {
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
 
+            SlidingButtonSelector(
+                options = options,
+                selectedIndex = selected,
+                onOptionSelected = { selected = it }
+            )
+
             // High score table (name, score, date)
-            HighScoreTable(highScores)
+            when (options[selected]) {
+                "Classic" -> HighScoreTable(highScores)
+                "Speed" -> HighScoreTable(speedHighScore)
+                "Walls" -> HighScoreTable(wallsHighScore)
+            }
+
+            SlidingButtonSelector(
+                options = options,
+                selectedIndex = selected,
+                onOptionSelected = { selected = it }
+            )
 
             // Back button
             Text(
@@ -90,6 +137,12 @@ fun HighScoreScreen(navController: NavController) {
                     .padding(top = 16.dp)
                     .clickable {
                         vibrate(context)
+                        // Set restoring state flag to prevent sound
+                        gameViewModel.setRestoringState(true)
+                        // Only pause if the game wasn't already over
+                        if (!gameViewModel.state.value.isGameOver) {
+                            gameViewModel.pauseGame()
+                        }
                         navController.popBackStack() // Go back to the previous screen
                     }
                     .padding(8.dp)
@@ -98,7 +151,7 @@ fun HighScoreScreen(navController: NavController) {
                 textAlign = TextAlign.Center
             )
 
-            // Back button
+            // Clear button
             Text(
                 text = stringResource(id = R.string.clear),
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
@@ -126,7 +179,7 @@ fun HighScoreTable(highScores: List<HighScore>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(500.dp)
+            .height(400.dp)
             .border(2.dp, color = Color.Black)
     ) {
         // Table header
@@ -153,14 +206,28 @@ fun HighScoreTable(highScores: List<HighScore>) {
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontWeight = FontWeight.Bold
             )
-            Text(
-                "Date",
-                Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                color = LightGreen,
-                fontFamily = FontFamily(Font(R.font.nokia_font)),
-                fontWeight = FontWeight.Bold
-            )
+            if (highScores.isNotEmpty() && highScores[0].maxSpeedReached != null) {
+                Text(
+                    "Max Speed",
+                    Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    color = LightGreen,
+                    fontFamily = FontFamily(Font(R.font.nokia_font)),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            if (highScores.isNotEmpty() && highScores[0].wallsLevel != null) {
+                Text(
+                    "Level",
+                    Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    color = LightGreen,
+                    fontFamily = FontFamily(Font(R.font.nokia_font)),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
         }
 
         LazyColumn(
@@ -191,11 +258,74 @@ fun HighScoreTable(highScores: List<HighScore>) {
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.nokia_font))
                     )
+
+                    if (highScores[0].maxSpeedReached != null) {
+                        Text(
+                            score.maxSpeedReached.toString(),
+                            Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            color = Color.Black,
+                            fontFamily = FontFamily(Font(R.font.nokia_font))
+                        )
+                    }
+
+                    if (highScores[0].wallsLevel != null) {
+                        Text(
+                            score.wallsLevel.toString(),
+                            Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            color = Color.Black,
+                            fontFamily = FontFamily(Font(R.font.nokia_font))
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SlidingButtonSelector(
+    options: List<String>,
+    selectedIndex: Int,
+    onOptionSelected: (Int) -> Unit
+) {
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+            .background(LightGreen)
+    ) {
+        val totalWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
+        val optionWidth = totalWidth / options.size
+
+        val animatedOffset by animateDpAsState(
+            targetValue = optionWidth * selectedIndex,
+            label = "OffsetAnimation"
+        )
+
+        // Sliding indicator
+        Box(
+            modifier = Modifier
+                .offset(x = animatedOffset)
+                .width(optionWidth)
+                .fillMaxHeight()
+                .background(Color.Black)
+        )
+
+        Row(modifier = Modifier.fillMaxSize()) {
+            options.forEachIndexed { index, text ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable { onOptionSelected(index) },
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
-                        score.date,
-                        Modifier.weight(1f),
+                        text,
                         textAlign = TextAlign.Center,
-                        color = Color.Black,
+                        color = if (index == selectedIndex) LightGreen else DarkGreen,
                         fontFamily = FontFamily(Font(R.font.nokia_font))
                     )
                 }

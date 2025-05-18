@@ -8,5 +8,20 @@ data class HighScoreEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val score: Int,
-    val date: String
+)
+
+@Entity(tableName = "wallshighscores")
+data class WallsHighScoreEntity(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val name: String,
+    val score: Int,
+    val wallsLevel: String
+)
+
+@Entity(tableName = "speedhighscores")
+data class SpeedHighScoreEntity(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val name: String,
+    val score: Int,
+    val maxSpeedReached: String
 )

@@ -36,6 +36,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -44,22 +45,36 @@ import androidx.navigation.NavController
 import com.example.snakegame.R
 import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
+import com.example.snakegame.presentation.datamodel.Settings
 import com.example.snakegame.presentation.ui.screen.controloption.ArrowButtons
 import com.example.snakegame.presentation.ui.screen.controloption.Joystick
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.getCurrentDate
+import com.example.snakegame.presentation.ui.utility.calculateSpeedKmPerHour
+import com.example.snakegame.presentation.viewmodel.GameLogicViewModel
 import com.example.snakegame.presentation.viewmodel.HighScoreViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 fun Snake(
-    game: GameLogic,
+    settings: Settings,
     gameType: GameTypeEnum,
     navController: NavController? = null,
-    buttonType: ButtonTypeEnum = ButtonTypeEnum.ARROW_BUTTON
+    buttonType: ButtonTypeEnum = ButtonTypeEnum.ARROW_BUTTON,
+    level: Int = 0
 ) {
-    val state = game.state.collectAsState(initial = null)
+    val viewModel: GameLogicViewModel = hiltViewModel()
+    val context = LocalContext.current
+
+    viewModel.setGameType(gameTypeEnum = gameType)
+    viewModel.setWallsLevel(level)
+
+    // Initialize game through ViewModel
+    val gameLogic = remember {
+        viewModel.getGameLogic(context, settings)
+    }
+
+    val state = gameLogic.state.collectAsState(initial = null)
 
     // state check
     val isGameOver = remember { mutableStateOf(false) }
@@ -71,22 +86,27 @@ fun Snake(
 
     // highscore check
     val highScores = remember { mutableIntStateOf(0) }
-    val viewModel: HighScoreViewModel = hiltViewModel()
+    val highScoreViewModel: HighScoreViewModel = hiltViewModel()
 
     // Observe game state to detect when the game is over
     state.value?.let { gameState ->
-        isGameOver.value = gameState.isGameOver // Trigger game over dialog
-        isPaused.value = gameState.isPause // Trigger game over dialog with pause
+        isGameOver.value = gameState.isGameOver
+        isPaused.value =
+            gameState.isPause && !isGameOver.value // Only show pause dialog if not game over
         showGameOverDialog.value = isGameOver.value || isPaused.value
+
+        // Update ViewModel state
+        viewModel.updateScore(gameState.score)
+        viewModel.updateSnakeLength(gameState.snake.size)
+
+        // Reset restoring state flag after state is updated
+        viewModel.setRestoringState(false)
     }
 
     // Fetch high score when game is over
     LaunchedEffect(isGameOver.value) {
-        if (isGameOver.value) {
-            highScores.intValue = viewModel.getHighestScores()?.score ?: 0
-        }
         showHighScoreDialog.value =
-            isGameOver.value && (state.value?.score ?: 0) > highScores.intValue && !isPaused.value
+            isGameOver.value && !isPaused.value
         showGameOverDialog.value = !showHighScoreDialog.value
     }
 
@@ -100,37 +120,43 @@ fun Snake(
                     foodSpawnTime = it.foodSpawnTime,
                     isBonusActive = it.isBonusActive
                 )
-                Board(it, game, gameType)
+                Board(it, gameLogic, gameType)
 
                 // Show SaveHighScoreDialog only if current score is greater than high score
                 if (showHighScoreDialog.value) {
                     SaveHighScoreDialog(
-                        score = state.value?.score ?: 0,
+                        title = "Too bad!",
+                        subtitle = "Your score is ${state.value?.score ?: 0}",
                         onSubmit = { name ->
-                            viewModel.addHighScore(
+                            highScoreViewModel.addHighScore(
                                 name = name,
                                 score = state.value?.score ?: 0,
-                                date = getCurrentDate()
+                                wallsLevel = viewModel.wallLevel.value.toString(),
+                                maxSpeedReached = calculateSpeedKmPerHour(
+                                    delayMillis = state.value?.speed ?: 0
+                                ).toString(),
+                                gameType = gameType
                             )
                             showHighScoreDialog.value = false
                             showGameOverDialog.value = true
                         },
                         onDismiss = {
                             showHighScoreDialog.value = false
-                            showGameOverDialog.value =
-                                true // Allow GameOverDialog to show after SaveHighScoreDialog
+                            isGameOver.value = false
+
+                            showGameOverDialog.value = true
                         }
                     )
                 }
 
+                // Show GameOverDialog if showGameOverDialog is true
                 if (showGameOverDialog.value) {
-                    // Show GameOverDialog if showGameOverDialog is true
                     GameOverDialog(
                         score = state.value?.score ?: 0,
                         onReplay = {
                             isGameOver.value = false
                             isPaused.value = false
-                            game.resetGame()
+                            viewModel.resetGame()
                         },
                         gameType = gameType,
                         onBackToSpecialGameMenu = {
@@ -153,6 +179,10 @@ fun Snake(
                             }
                         },
                         onSeeHighScore = {
+                            // Don't pause the game if it's already game over
+                            if (!isGameOver.value) {
+                                viewModel.pauseGame()
+                            }
                             navController?.navigate("high_score")
                         },
                         onDismiss = {
@@ -162,8 +192,7 @@ fun Snake(
                         isPaused = isPaused.value,
                         onContinue = {
                             isPaused.value = false
-                            isGameOver.value = false
-                            game.resumeGame()
+                            viewModel.resumeGame()
                         }
                     )
                 }
@@ -172,11 +201,11 @@ fun Snake(
             // game control button type
             when (buttonType) {
                 ButtonTypeEnum.ARROW_BUTTON -> ArrowButtons {
-                    game.changeDirection(it, isPaused.value)
+                    gameLogic.changeDirection(it, isPaused.value)
                 }
 
                 ButtonTypeEnum.JOYSTICK -> Joystick {
-                    game.changeDirection(it, isPaused.value)
+                    gameLogic.changeDirection(it, isPaused.value)
                 }
             }
         }
@@ -203,7 +232,7 @@ fun Score(state: State, gameType: GameTypeEnum) {
         // show speed number for speed mode
         if (gameType == GameTypeEnum.SNAKE_GAME_SPEED) {
             Text(
-                text = "Current speed: ${state.speed}",
+                text = "Speed: ${calculateSpeedKmPerHour(delayMillis = state.speed)} km/hr",
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
                 ),

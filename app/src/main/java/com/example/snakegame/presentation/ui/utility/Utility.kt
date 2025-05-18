@@ -7,6 +7,7 @@ import android.os.VibratorManager
 import com.example.snakegame.presentation.ui.screen.GameLogic.Companion.BOARD_SIZE
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.ceil
 
 // vibrate for onclick
 object VibrationManager {
@@ -101,4 +102,10 @@ fun generateRandomFood(snake: List<Pair<Int, Int>>, walls: List<Pair<Int, Int>>)
         // In case no valid positions remain, this should not happen unless the entire board is filled
         Pair(0, 0)
     }
+}
+
+fun calculateSpeedKmPerHour(tileDistanceMeters: Double = 1.0, delayMillis: Long): Double {
+    val secondsPerMove = delayMillis / 1000.0
+    val metersPerSecond = tileDistanceMeters / secondsPerMove
+    return ceil(metersPerSecond * 3.6)
 }

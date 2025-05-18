@@ -29,7 +29,8 @@ import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 
 @Composable
 fun SaveHighScoreDialog(
-    score: Int,
+    title: String,
+    subtitle: String,
     onSubmit: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -55,7 +56,7 @@ fun SaveHighScoreDialog(
             ) {
                 // Congratulation Title
                 Text(
-                    text = "Congratulations!",
+                    text = title,
                     fontFamily = FontFamily(
                         Font(R.font.nokia_font)
                     ),
@@ -65,7 +66,7 @@ fun SaveHighScoreDialog(
 
                 // Show the player's high score
                 Text(
-                    text = "New High Score: $score",
+                    text = subtitle,
                     fontFamily = FontFamily(
                         Font(R.font.nokia_font)
                     ),

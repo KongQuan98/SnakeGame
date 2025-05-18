@@ -3,9 +3,6 @@ package com.example.snakegame.presentation.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,7 +12,6 @@ import androidx.navigation.navArgument
 import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.datamodel.Settings
-import com.example.snakegame.presentation.ui.screen.GameLogic
 import com.example.snakegame.presentation.ui.screen.HighScoreScreen
 import com.example.snakegame.presentation.ui.screen.MainMenu
 import com.example.snakegame.presentation.ui.screen.Snake
@@ -33,8 +29,6 @@ import kotlin.system.exitProcess
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-
-    val context = LocalContext.current
 
     val settingsViewModel: SettingsViewModel = hiltViewModel()
     val snakeSpeed by settingsViewModel.snakeSpeed.observeAsState(initial = 150L)
@@ -59,19 +53,8 @@ fun AppNavigation() {
 
         // Snake Game Screen
         composable("snake_game") {
-            // Use remember to instantiate Game with a CoroutineScope
-            val scope = rememberCoroutineScope()
-            val game =
-                remember {
-                    GameLogic(
-                        scope = scope,
-                        context = context,
-                        gameType = GameTypeEnum.SNAKE_GAME_CLASSIC,
-                        settings = settings
-                    )
-                }
             Snake(
-                game = game,
+                settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_CLASSIC,
                 navController = navController,
                 buttonType = buttonType
@@ -120,37 +103,18 @@ fun AppNavigation() {
             listOf(navArgument("wallsLevel") { NavType.IntType })
         ) {
             val level = it.arguments?.getString("wallsLevel")?.toInt() ?: 0
-            val scope = rememberCoroutineScope()
-            val game =
-                remember {
-                    GameLogic(
-                        scope = scope,
-                        context = context,
-                        gameType = GameTypeEnum.SNAKE_GAME_WALLS,
-                        wallsLevel = level,
-                        settings = settings,
-                    )
-                }
             Snake(
-                game = game,
+                settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_WALLS,
                 navController = navController,
-                buttonType = buttonType
+                buttonType = buttonType,
+                level = level
             )
         }
 
         composable("snake_game_maze") {
-            val scope = rememberCoroutineScope()
-            val game = remember {
-                GameLogic(
-                    scope = scope,
-                    context = context,
-                    gameType = GameTypeEnum.SNAKE_GAME_MAZE,
-                    settings = settings,
-                )
-            }
             Snake(
-                game = game,
+                settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_MAZE,
                 navController = navController,
                 buttonType = buttonType
@@ -158,17 +122,8 @@ fun AppNavigation() {
         }
 
         composable("snake_game_speed") {
-            val scope = rememberCoroutineScope()
-            val game = remember {
-                GameLogic(
-                    scope = scope,
-                    context = context,
-                    gameType = GameTypeEnum.SNAKE_GAME_SPEED,
-                    settings = settings,
-                )
-            }
             Snake(
-                game = game,
+                settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_SPEED,
                 navController = navController,
                 buttonType = buttonType
