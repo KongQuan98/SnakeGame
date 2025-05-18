@@ -42,6 +42,9 @@ class GameLogicViewModel @Inject constructor(
     // Flag to prevent sound when restoring state
     private var isRestoringState = false
 
+    // Flag to track if save highscore dialog has been shown
+    private var hasShownSaveHighScoreDialog = false
+
     fun getGameLogic(context: Context, settings: Settings): GameLogic {
         if (currentGame == null) {
             currentGame = GameLogic(
@@ -87,6 +90,7 @@ class GameLogicViewModel @Inject constructor(
 
     // Function to reset the game
     fun resetGame() {
+        hasShownSaveHighScoreDialog = false
         currentGame?.resetGame()
     }
 
@@ -98,6 +102,16 @@ class GameLogicViewModel @Inject constructor(
     // Function to set game type
     fun setGameType(gameTypeEnum: GameTypeEnum) {
         gameType.value = gameTypeEnum
+    }
+
+    // Function to set whether save highscore dialog has been shown
+    fun setHasShownSaveHighScoreDialog(shown: Boolean) {
+        hasShownSaveHighScoreDialog = shown
+    }
+
+    // Function to get whether save highscore dialog has been shown
+    fun getHasShownSaveHighScoreDialog(): Boolean {
+        return hasShownSaveHighScoreDialog
     }
 
     override fun onCleared() {

@@ -77,7 +77,7 @@ fun WallsSelectionScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Menu Options
-                val levels = (1..10).toList()
+                val levels = (1..9).toList()
                 itemsIndexed(levels) { index, level ->
                     MenuOption(
                         text = "Walls Level $level",

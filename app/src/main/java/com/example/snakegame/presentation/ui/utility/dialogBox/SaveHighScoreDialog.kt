@@ -81,10 +81,11 @@ fun SaveHighScoreDialog(
                         playerName = newText
                         isError = newText.text.isBlank() // Check if input is blank
                     },
-                    label = { Text("Enter your name") },
+                    label = { Text("Enter your name here") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, Color.Black),
+                    singleLine = true,
                     isError = isError // Show error if blank
                 )
 

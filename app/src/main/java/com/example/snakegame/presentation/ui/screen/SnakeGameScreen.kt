@@ -106,7 +106,7 @@ fun Snake(
     // Fetch high score when game is over
     LaunchedEffect(isGameOver.value) {
         showHighScoreDialog.value =
-            isGameOver.value && !isPaused.value
+            isGameOver.value && !isPaused.value && !viewModel.getHasShownSaveHighScoreDialog()
         showGameOverDialog.value = !showHighScoreDialog.value
     }
 
@@ -126,7 +126,7 @@ fun Snake(
                 if (showHighScoreDialog.value) {
                     SaveHighScoreDialog(
                         title = "Too bad!",
-                        subtitle = "Your score is ${state.value?.score ?: 0}",
+                        subtitle = "Your score is ${state.value?.score ?: 0}, save now?",
                         onSubmit = { name ->
                             highScoreViewModel.addHighScore(
                                 name = name,
@@ -139,12 +139,13 @@ fun Snake(
                             )
                             showHighScoreDialog.value = false
                             showGameOverDialog.value = true
+                            viewModel.setHasShownSaveHighScoreDialog(true)
                         },
                         onDismiss = {
                             showHighScoreDialog.value = false
                             isGameOver.value = false
-
                             showGameOverDialog.value = true
+                            viewModel.setHasShownSaveHighScoreDialog(true)
                         }
                     )
                 }
