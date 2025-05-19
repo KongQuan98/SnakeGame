@@ -66,8 +66,16 @@ fun AppNavigation() {
             SpecialModeScreen(navController = navController)
         }
 
-        composable("high_score") {
-            HighScoreScreen(navController = navController)
+        composable(
+            "high_score/{gamemode}",
+            listOf(navArgument("gamemode") { NavType.StringType })
+        ) {
+            val gameMode = it.arguments?.getString("gamemode")
+            HighScoreScreen(
+                navController = navController,
+                gameMode = gameMode?.let { enum -> GameTypeEnum.valueOf(enum) }
+                    ?: GameTypeEnum.SNAKE_GAME_CLASSIC
+            )
         }
 
         composable("settings") {

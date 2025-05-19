@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
+import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
@@ -56,7 +57,7 @@ data class HighScore(
 )
 
 @Composable
-fun HighScoreScreen(navController: NavController) {
+fun HighScoreScreen(navController: NavController, gameMode: GameTypeEnum) {
     val context = LocalContext.current
     val highScores = remember { mutableStateListOf<HighScore>() }
     val wallsHighScore = remember { mutableStateListOf<HighScore>() }
@@ -75,7 +76,13 @@ fun HighScoreScreen(navController: NavController) {
         speedHighScore.addAll(viewModel.getSpeedHighScores())
     }
 
-    var selected by remember { mutableIntStateOf(0) }
+    val defaultIndex = when (gameMode) {
+        GameTypeEnum.SNAKE_GAME_WALLS -> 1
+        GameTypeEnum.SNAKE_GAME_SPEED -> 2
+        else -> 0
+    }
+
+    var selected by remember { mutableIntStateOf(defaultIndex) }
     val options = listOf(
         "Classic",
         "Walls",

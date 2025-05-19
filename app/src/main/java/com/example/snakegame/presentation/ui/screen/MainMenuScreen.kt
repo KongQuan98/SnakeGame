@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
+import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
@@ -50,7 +51,7 @@ fun MainMenu(navController: NavController) {
     val menuOptions = listOf(
         "Start Game" to "snake_game",
         "Special Mode" to "special_mode",
-        "High Scores" to "high_score",
+        "High Scores" to "high_score/${GameTypeEnum.SNAKE_GAME_CLASSIC.name}",
         "Settings" to "settings",
         "Exit" to null // Null as we don't need navigation for exit
     )

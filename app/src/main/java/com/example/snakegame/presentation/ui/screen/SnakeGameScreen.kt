@@ -184,7 +184,7 @@ fun Snake(
                             if (!isGameOver.value) {
                                 viewModel.pauseGame()
                             }
-                            navController?.navigate("high_score")
+                            navController?.navigate("high_score/${gameType.name}")
                         },
                         onDismiss = {
                             isPaused.value = false
