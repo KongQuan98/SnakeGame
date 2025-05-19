@@ -163,21 +163,17 @@ fun Snake(
                         onBackToSpecialGameMenu = {
                             isGameOver.value = false
                             isPaused.value = false
-                            val navigateLocation = when {
-                                gameType == GameTypeEnum.SNAKE_GAME_WALLS -> "snake_game_walls_selection"
-                                gameType == GameTypeEnum.SNAKE_GAME_SPEED -> "special_mode"
+                            val navigateLocation = when (gameType) {
+                                GameTypeEnum.SNAKE_GAME_WALLS -> "snake_game_walls_selection"
+                                GameTypeEnum.SNAKE_GAME_SPEED -> "special_mode"
                                 else -> "main_menu"
                             }
-                            navController?.navigate(navigateLocation) {
-                                popUpTo(navigateLocation) { inclusive = true }
-                            }
+                            navController?.popBackStack(navigateLocation, false)
                         },
                         onBackToMainMenu = {
                             isGameOver.value = false
                             isPaused.value = false
-                            navController?.navigate("main_menu") {
-                                popUpTo("main_menu") { inclusive = true }
-                            }
+                            navController?.popBackStack("main_menu", false)
                         },
                         onSeeHighScore = {
                             // Don't pause the game if it's already game over

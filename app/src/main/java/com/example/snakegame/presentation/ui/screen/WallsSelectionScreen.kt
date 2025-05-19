@@ -11,10 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,14 +23,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.viewmodel.MenuStateViewModel
 
 @Composable
 fun WallsSelectionScreen(navController: NavController) {
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    val viewModel: MenuStateViewModel = hiltViewModel()
+    val selectedIndex by viewModel.wallsSelectedIndex.collectAsState()
 
     val context = LocalContext.current
 
@@ -84,7 +85,7 @@ fun WallsSelectionScreen(navController: NavController) {
                         isSelected = index == selectedIndex,
                         onClick = {
                             vibrate(context)
-                            selectedIndex = index
+                            viewModel.wallsSelectedIndex.value = index
                             navController.navigate("snake_game_walls/$level")
                         }
                     )
