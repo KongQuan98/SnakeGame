@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Retro Ular</string>
+
+    <!-- Main Menu -->
+    <string name="start_game">Mula Permainan</string>
+    <string name="special_mode">Mod Khas</string>
+    <string name="high_scores">Skor Tertinggi</string>
+    <string name="settings">Tetapan</string>
+    <string name="exit">Keluar</string>
+
+    <!-- High Score Screen -->
+    <string name="classic">Klasik</string>
+    <string name="walls">Dinding</string>
+    <string name="speed">Kelajuan</string>
+    <string name="clear">Bersihkan</string>
+    <string name="name">Nama</string>
+    <string name="score">Skor</string>
+    <string name="max_speed">Kelajuan Maksimum</string>
+    <string name="level">Tahap</string>
+
+    <!-- Special Mode Screen -->
+    <string name="walls_challenge">Cabaran Dinding</string>
+    <string name="speed_challenge">Cabaran Kelajuan</string>
+    <string name="choose_challenge">Pilih Cabaran</string>
+
+    <!-- Settings Screen -->
+    <string name="choose_level">Pilih Tahap</string>
+    <string name="snake_speed">Kelajuan Ular</string>
+    <string name="change_button_type">Jenis Butang</string>
+    <string name="music_vibration">Muzik &amp; Getaran</string>
+    <string name="language">Bahasa</string>
+    <string name="back">Kembali</string>
+    <string name="done">Selesai</string>
+    <string name="super_slow">Sangat Perlahan</string>
+    <string name="slow">Perlahan</string>
+    <string name="medium">Sederhana (Disyorkan)</string>
+    <string name="fast">Laju</string>
+    <string name="super_fast">Sangat Laju</string>
+    <string name="arrow_button">Butang Anak Panah</string>
+    <string name="joystick">Kayu Bedik</string>
+    <string name="music">Muzik</string>
+    <string name="vibration">Getaran</string>
+    <string name="on">Hidup</string>
+    <string name="off">Mati</string>
+    <string name="music_is_switched">Muzik telah ditukar</string>
+    <string name="vibration_is_switched">Getaran telah ditukar</string>
+
+    <!-- Language Options -->
+    <string name="english">English</string>
+    <string name="chinese">中文</string>
+    <string name="malay">Bahasa Melayu</string>
+    <string name="changed_to">telah ditukar kepada</string>
+
+    <!-- Game Messages -->
+    <string name="too_bad">Malangnya!</string>
+    <string name="your_score_is">Skor anda ialah</string>
+    <string name="save_now">Simpan sekarang</string>
+    <string name="continue_text">Teruskan</string>
+    <string name="game_paused">Permainan Dijeda</string>
+    <string name="game_over">Permainan Tamat</string>
+    <string name="replay">Main Semula</string>
+    <string name="walls_selection">Pilihan Dinding</string>
+    <string name="back_to_special_mode">Kembali ke Mod Khas</string>
+    <string name="back_to_main_menu">Kembali ke Menu Utama</string>
+    <string name="see_high_score">Lihat Skor Tertinggi</string>
+    <string name="is_selected">telah dipilih</string>
+    <string name="enter_your_name_here">Masukkan nama anda di sini</string>
+    <string name="name_cannot_be_empty">Nama tidak boleh kosong</string>
+    <string name="save">Simpan</string>
+    <string name="no_thanks">Tidak, Terima Kasih</string>
+</resources> 

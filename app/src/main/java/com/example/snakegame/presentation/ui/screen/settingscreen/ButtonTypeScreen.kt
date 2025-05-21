@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -48,8 +49,8 @@ fun ButtonTypeScreen(navController: NavController) {
     var selectedButtonType by remember { mutableStateOf(ButtonTypeEnum.ARROW_BUTTON) }
 
     val menuOptions = listOf(
-        "Arrow Button" to ButtonTypeEnum.ARROW_BUTTON,
-        "Joystick" to ButtonTypeEnum.JOYSTICK,
+        stringResource(id = R.string.arrow_button) to ButtonTypeEnum.ARROW_BUTTON,
+        stringResource(id = R.string.joystick) to ButtonTypeEnum.JOYSTICK,
     )
     val context = LocalContext.current
 
@@ -78,7 +79,7 @@ fun ButtonTypeScreen(navController: NavController) {
             // Title
             Text(
                 modifier = Modifier.padding(horizontal = 40.dp),
-                text = "Change Button Type",
+                text = stringResource(id = R.string.change_button_type),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -127,7 +128,7 @@ fun ButtonTypeScreen(navController: NavController) {
                                 viewModel.updateButtonType(buttonType)
                                 Toast.makeText(
                                     context,
-                                    "${menuOptions[selectedIndex].first} is selected",
+                                    "${menuOptions[selectedIndex].first} ${context.getString(R.string.is_selected)}",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -137,7 +138,7 @@ fun ButtonTypeScreen(navController: NavController) {
             }
 
             Text(
-                text = "Done",
+                text = stringResource(id = R.string.done),
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

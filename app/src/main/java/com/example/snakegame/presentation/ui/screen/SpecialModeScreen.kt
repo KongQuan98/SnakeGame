@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -34,9 +35,9 @@ fun SpecialModeScreen(navController: NavController) {
     val selectedIndex by viewModel.specialModeSelectedIndex.collectAsState()
 
     val menuOptions = listOf(
-        "Walls Challenge" to "snake_game_walls_selection",
+        stringResource(id = R.string.walls_challenge) to "snake_game_walls_selection",
 //        "Maze Challenge" to "snake_game_maze",
-        "Speed Challenge" to "snake_game_speed",
+        stringResource(id = R.string.speed_challenge) to "snake_game_speed",
     )
 
     val context = LocalContext.current
@@ -55,7 +56,7 @@ fun SpecialModeScreen(navController: NavController) {
         ) {
             // Title
             Text(
-                text = "Special Mode",
+                text = stringResource(id = R.string.special_mode),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -65,7 +66,7 @@ fun SpecialModeScreen(navController: NavController) {
             )
 
             Text(
-                text = "Choose a challenge",
+                text = stringResource(id = R.string.choose_challenge),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -98,7 +99,7 @@ fun SpecialModeScreen(navController: NavController) {
             }
 
             Text(
-                text = "Back",
+                text = stringResource(id = R.string.back),
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

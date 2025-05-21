@@ -11,8 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.snakegame.R
@@ -49,7 +51,9 @@ fun GameOverDialog(
             ) {
                 // Game Over Title
                 Text(
-                    text = if (isPaused) "Game Paused" else "Game Over!",
+                    text = if (isPaused) stringResource(id = R.string.game_paused) else stringResource(
+                        id = R.string.game_over
+                    ),
                     fontFamily = FontFamily(
                         Font(R.font.nokia_font)
                     ),
@@ -59,7 +63,7 @@ fun GameOverDialog(
 
                 // Show the player's score
                 Text(
-                    text = "Your Score: $score",
+                    text = "${stringResource(id = R.string.your_score_is)}: $score",
                     fontFamily = FontFamily(
                         Font(R.font.nokia_font)
                     ),
@@ -79,7 +83,7 @@ fun GameOverDialog(
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                     ) {
                         Text(
-                            text = "Continue",
+                            text = stringResource(id = R.string.continue_text),
                             fontFamily = FontFamily(
                                 Font(R.font.nokia_font)
                             ),
@@ -99,7 +103,7 @@ fun GameOverDialog(
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
-                        text = "Replay",
+                        text = stringResource(id = R.string.replay),
                         fontFamily = FontFamily(
                             Font(R.font.nokia_font)
                         ),
@@ -109,8 +113,8 @@ fun GameOverDialog(
 
                 if (gameType == GameTypeEnum.SNAKE_GAME_WALLS || gameType == GameTypeEnum.SNAKE_GAME_SPEED) {
                     val buttonText = when {
-                        gameType == GameTypeEnum.SNAKE_GAME_WALLS -> "Walls Selection"
-                        else -> "Back to Special Mode"
+                        gameType == GameTypeEnum.SNAKE_GAME_WALLS -> stringResource(id = R.string.walls_selection)
+                        else -> stringResource(id = R.string.back_to_special_mode)
                     }
                     Button(
                         onClick = {
@@ -124,6 +128,7 @@ fun GameOverDialog(
                         Text(
                             modifier = Modifier.align(Alignment.CenterVertically),
                             text = buttonText,
+                            textAlign = TextAlign.Center,
                             fontFamily = FontFamily(
                                 Font(R.font.nokia_font)
                             ),
@@ -143,7 +148,8 @@ fun GameOverDialog(
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
-                        text = "Back to Main Menu",
+                        text = stringResource(id = R.string.back_to_main_menu),
+                        textAlign = TextAlign.Center,
                         fontFamily = FontFamily(
                             Font(R.font.nokia_font)
                         ),
@@ -162,7 +168,8 @@ fun GameOverDialog(
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
-                        text = "See High Score",
+                        text = stringResource(id = R.string.see_high_score),
+                        textAlign = TextAlign.Center,
                         fontFamily = FontFamily(
                             Font(R.font.nokia_font)
                         ),

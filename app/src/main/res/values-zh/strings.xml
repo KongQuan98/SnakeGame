@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">贪吃蛇游戏</string>
+
+    <!-- Main Menu -->
+    <string name="start_game">开始游戏</string>
+    <string name="special_mode">特殊模式</string>
+    <string name="high_scores">最高分</string>
+    <string name="settings">设置</string>
+    <string name="exit">退出</string>
+
+    <!-- High Score Screen -->
+    <string name="classic">经典模式</string>
+    <string name="walls">墙壁模式</string>
+    <string name="speed">速度模式</string>
+    <string name="clear">清除</string>
+    <string name="name">名字</string>
+    <string name="score">分数</string>
+    <string name="max_speed">最大速度</string>
+    <string name="level">等级</string>
+
+    <!-- Special Mode Screen -->
+    <string name="walls_challenge">墙壁挑战</string>
+    <string name="speed_challenge">速度挑战</string>
+    <string name="choose_challenge">选择挑战</string>
+
+    <!-- Settings Screen -->
+    <string name="choose_level">选择等级</string>
+    <string name="snake_speed">蛇的速度</string>
+    <string name="change_button_type">按钮类型</string>
+    <string name="music_vibration">音乐和振动</string>
+    <string name="language">语言</string>
+    <string name="back">返回</string>
+    <string name="done">完成</string>
+    <string name="super_slow">超慢</string>
+    <string name="slow">慢</string>
+    <string name="medium">中等（推荐）</string>
+    <string name="fast">快</string>
+    <string name="super_fast">超快</string>
+    <string name="arrow_button">箭头按钮</string>
+    <string name="joystick">摇杆</string>
+    <string name="music">音乐</string>
+    <string name="vibration">振动</string>
+    <string name="on">开</string>
+    <string name="off">关</string>
+    <string name="music_is_switched">音乐已切换</string>
+    <string name="vibration_is_switched">振动已切换</string>
+
+    <!-- Language Options -->
+    <string name="english">English</string>
+    <string name="chinese">中文</string>
+    <string name="malay">Bahasa Melayu</string>
+    <string name="changed_to">已更改为</string>
+
+    <!-- Game Messages -->
+    <string name="too_bad">太可惜了！</string>
+    <string name="your_score_is">你的分数是</string>
+    <string name="save_now">立即保存</string>
+    <string name="continue_text">继续</string>
+    <string name="game_paused">游戏暂停</string>
+    <string name="game_over">游戏结束</string>
+    <string name="replay">重新开始</string>
+    <string name="walls_selection">墙壁选择</string>
+    <string name="back_to_special_mode">返回特殊模式</string>
+    <string name="back_to_main_menu">返回主菜单</string>
+    <string name="see_high_score">查看最高分</string>
+    <string name="is_selected">已选择</string>
+    <string name="enter_your_name_here">在此输入你的名字</string>
+    <string name="name_cannot_be_empty">名字不能为空</string>
+    <string name="save">保存</string>
+    <string name="no_thanks">不用了</string>
+</resources> 

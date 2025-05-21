@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -49,11 +50,11 @@ fun MainMenu(navController: NavController) {
     val selectedIndex by viewModel.mainMenuSelectedIndex.collectAsState()
 
     val menuOptions = listOf(
-        "Start Game" to "snake_game",
-        "Special Mode" to "special_mode",
-        "High Scores" to "high_score/${GameTypeEnum.SNAKE_GAME_CLASSIC.name}",
-        "Settings" to "settings",
-        "Exit" to null // Null as we don't need navigation for exit
+        stringResource(id = R.string.start_game) to "snake_game",
+        stringResource(id = R.string.special_mode) to "special_mode",
+        stringResource(id = R.string.high_scores) to "high_score/${GameTypeEnum.SNAKE_GAME_CLASSIC.name}",
+        stringResource(id = R.string.settings) to "settings",
+        stringResource(id = R.string.exit) to null // Null as we don't need navigation for exit
     )
 
     val context = LocalContext.current
@@ -72,12 +73,13 @@ fun MainMenu(navController: NavController) {
         ) {
             // Title
             Text(
-                text = "Retro Snake",
+                text = stringResource(id = R.string.app_name),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
                 ),
                 fontSize = 35.sp,
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
             )
 

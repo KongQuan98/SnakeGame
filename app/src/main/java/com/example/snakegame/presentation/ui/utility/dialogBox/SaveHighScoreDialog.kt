@@ -17,9 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -57,6 +59,7 @@ fun SaveHighScoreDialog(
                 // Congratulation Title
                 Text(
                     text = title,
+                    textAlign = TextAlign.Center,
                     fontFamily = FontFamily(
                         Font(R.font.nokia_font)
                     ),
@@ -67,6 +70,7 @@ fun SaveHighScoreDialog(
                 // Show the player's high score
                 Text(
                     text = subtitle,
+                    textAlign = TextAlign.Center,
                     fontFamily = FontFamily(
                         Font(R.font.nokia_font)
                     ),
@@ -81,7 +85,7 @@ fun SaveHighScoreDialog(
                         playerName = newText
                         isError = newText.text.isBlank() // Check if input is blank
                     },
-                    label = { Text("Enter your name here") },
+                    label = { Text(stringResource(id = R.string.enter_your_name_here)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, Color.Black),
@@ -92,7 +96,7 @@ fun SaveHighScoreDialog(
                 // Display error message if name is empty
                 if (isError) {
                     Text(
-                        text = "Name cannot be empty",
+                        text = stringResource(id = R.string.name_cannot_be_empty),
                         color = Color.Red,
                         fontSize = 14.sp
                     )
@@ -114,7 +118,7 @@ fun SaveHighScoreDialog(
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
-                        text = "Save",
+                        text = stringResource(id = R.string.save),
                         fontFamily = FontFamily(
                             Font(R.font.nokia_font)
                         ),
@@ -134,7 +138,7 @@ fun SaveHighScoreDialog(
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
-                        text = "No thanks",
+                        text = stringResource(id = R.string.no_thanks),
                         fontFamily = FontFamily(
                             Font(R.font.nokia_font)
                         ),

@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -72,7 +73,7 @@ fun MusicVibrationControlScreen(navController: NavController) {
             // Title
             Text(
                 modifier = Modifier.padding(horizontal = 40.dp),
-                text = "Music & Vibration",
+                text = stringResource(id = R.string.music_vibration),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -104,11 +105,15 @@ fun MusicVibrationControlScreen(navController: NavController) {
                                     MusicVibrationEnum.MUSIC -> {
                                         selectedMusicEnabled = !selectedMusicEnabled
                                         viewModel.updateMusicEnabled(selectedMusicEnabled)
-                                        val onOff = if (selectedMusicEnabled) "On" else "Off"
+                                        val onOff =
+                                            if (selectedMusicEnabled)
+                                                context.getString(R.string.on)
+                                            else
+                                                context.getString(R.string.off)
                                         Toast
                                             .makeText(
                                                 context,
-                                                "Music is switched $onOff",
+                                                "${context.getString(R.string.music_is_switched)} $onOff",
                                                 Toast.LENGTH_SHORT
                                             )
                                             .show()
@@ -117,11 +122,15 @@ fun MusicVibrationControlScreen(navController: NavController) {
                                     MusicVibrationEnum.VIBRATION -> {
                                         selectedVibrationEnabled = !selectedVibrationEnabled
                                         viewModel.updateVibrationEnabled(selectedVibrationEnabled)
-                                        val onOff = if (selectedVibrationEnabled) "On" else "Off"
+                                        val onOff =
+                                            if (selectedVibrationEnabled)
+                                                context.getString(R.string.on)
+                                            else
+                                                context.getString(R.string.off)
                                         Toast
                                             .makeText(
                                                 context,
-                                                "Vibration is switched $onOff",
+                                                "${context.getString(R.string.vibration_is_switched)} $onOff",
                                                 Toast.LENGTH_SHORT
                                             )
                                             .show()
@@ -130,8 +139,17 @@ fun MusicVibrationControlScreen(navController: NavController) {
                             }),
                     ) {
                         val status = when (option) {
-                            MusicVibrationEnum.MUSIC -> if (selectedMusicEnabled) "On" else "Off"
-                            MusicVibrationEnum.VIBRATION -> if (selectedVibrationEnabled) "On" else "Off"
+                            MusicVibrationEnum.MUSIC ->
+                                if (selectedMusicEnabled)
+                                    context.getString(R.string.on)
+                                else
+                                    context.getString(R.string.off)
+
+                            MusicVibrationEnum.VIBRATION ->
+                                if (selectedVibrationEnabled)
+                                    context.getString(R.string.on)
+                                else
+                                    context.getString(R.string.off)
                         }
 
                         Row(
@@ -141,7 +159,10 @@ fun MusicVibrationControlScreen(navController: NavController) {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = option.name,
+                                text = when (option) {
+                                    MusicVibrationEnum.MUSIC -> stringResource(id = R.string.music)
+                                    MusicVibrationEnum.VIBRATION -> stringResource(id = R.string.vibration)
+                                },
                                 color = if (isSelected) LightGreen else Color.Black,
                                 fontSize = 18.sp,
                                 fontFamily = FontFamily(Font(R.font.nokia_font)),
@@ -163,7 +184,7 @@ fun MusicVibrationControlScreen(navController: NavController) {
             }
 
             Text(
-                text = "Done",
+                text = stringResource(id = R.string.done),
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

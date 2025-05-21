@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -51,7 +52,7 @@ fun WallsSelectionScreen(navController: NavController) {
         ) {
             // Title
             Text(
-                text = "Walls Challenge",
+                text = stringResource(id = R.string.walls_challenge),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -61,7 +62,7 @@ fun WallsSelectionScreen(navController: NavController) {
             )
 
             Text(
-                text = "Choose a level",
+                text = stringResource(id = R.string.choose_level),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -81,7 +82,7 @@ fun WallsSelectionScreen(navController: NavController) {
                 val levels = (1..9).toList()
                 itemsIndexed(levels) { index, level ->
                     MenuOption(
-                        text = "Walls Level $level",
+                        text = "${stringResource(id = R.string.level)} $level",
                         isSelected = index == selectedIndex,
                         onClick = {
                             vibrate(context)
@@ -93,7 +94,7 @@ fun WallsSelectionScreen(navController: NavController) {
             }
 
             Text(
-                text = "Back",
+                text = stringResource(id = R.string.back),
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,

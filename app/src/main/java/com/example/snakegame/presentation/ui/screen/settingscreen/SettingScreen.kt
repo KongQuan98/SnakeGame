@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -36,10 +37,10 @@ fun SettingScreen(navController: NavController) {
     val selectedIndex by viewModel.settingsSelectedIndex.collectAsState()
 
     val menuOptions = listOf(
-        "Snake Speed" to "settings_snake_speed",
-        "Change Button Type" to "settings_change_button_type",
-        "Music & Vibration" to "settings_music_vibration",
-        "Language" to "settings_language",
+        stringResource(id = R.string.snake_speed) to "settings_snake_speed",
+        stringResource(id = R.string.change_button_type) to "settings_change_button_type",
+        stringResource(id = R.string.music_vibration) to "settings_music_vibration",
+        stringResource(id = R.string.language) to "settings_language",
     )
 
     val context = LocalContext.current
@@ -58,7 +59,7 @@ fun SettingScreen(navController: NavController) {
         ) {
             // Title
             Text(
-                text = "Settings",
+                text = stringResource(id = R.string.settings),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -75,22 +76,17 @@ fun SettingScreen(navController: NavController) {
             ) {
                 // Menu Options
                 menuOptions.forEachIndexed { index, option ->
-                    MenuOption(
-                        text = option.first,
-                        isSelected = index == selectedIndex,
-                        onClick = {
-                            vibrate(context)
-                            viewModel.settingsSelectedIndex.value = index
-                            option.second.let { route ->
-                                navController.navigate(route)
-                            }
+                    MenuOption(text = option.first, isSelected = index == selectedIndex, onClick = {
+                        vibrate(context)
+                        viewModel.settingsSelectedIndex.value = index
+                        option.second.let { route ->
+                            navController.navigate(route)
                         }
-                    )
+                    })
                 }
             }
 
-            Text(
-                text = "Back",
+            Text(text = stringResource(id = R.string.back),
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -104,10 +100,7 @@ fun SettingScreen(navController: NavController) {
                     .padding(8.dp)
                     .background(Color.Black)
                     .padding(horizontal = 32.dp, vertical = 8.dp),
-                textAlign = TextAlign.Center
-            )
+                textAlign = TextAlign.Center)
         }
-
-
     }
 }

@@ -1,5 +1,6 @@
 package com.example.snakegame.presentation.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -82,11 +85,12 @@ fun HighScoreScreen(navController: NavController, gameMode: GameTypeEnum) {
         else -> 0
     }
 
+    val scrollState = rememberScrollState()
     var selected by remember { mutableIntStateOf(defaultIndex) }
     val options = listOf(
-        "Classic",
-        "Walls",
-        "Speed"
+        stringResource(id = R.string.classic),
+        stringResource(id = R.string.walls),
+        stringResource(id = R.string.speed),
     )
 
     // Main layout with the title and the high score table
@@ -94,7 +98,6 @@ fun HighScoreScreen(navController: NavController, gameMode: GameTypeEnum) {
         modifier = Modifier
             .fillMaxSize()
             .background(LightGreen),
-        contentAlignment = Alignment.Center
     ) {
 
         SnakeAnimation()
@@ -103,80 +106,84 @@ fun HighScoreScreen(navController: NavController, gameMode: GameTypeEnum) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(40.dp)
+                .verticalScroll(scrollState)
         ) {
-            // Title
             Text(
                 text = stringResource(id = R.string.high_scores),
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 32.sp,
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
 
-            SlidingButtonSelector(
-                options = options,
-                selectedIndex = selected,
-                onOptionSelected = { selected = it }
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                SlidingButtonSelector(
+                    options = options,
+                    selectedIndex = selected,
+                    onOptionSelected = { selected = it }
+                )
 
-            // High score table (name, score, date)
-            when (options[selected]) {
-                "Classic" -> HighScoreTable(highScores)
-                "Speed" -> HighScoreTable(speedHighScore)
-                "Walls" -> HighScoreTable(wallsHighScore)
-            }
+                // High score table (name, score, date)
+                when (options[selected]) {
+                    stringResource(id = R.string.classic) -> HighScoreTable(highScores)
+                    stringResource(id = R.string.speed) -> HighScoreTable(speedHighScore)
+                    stringResource(id = R.string.walls) -> HighScoreTable(wallsHighScore)
+                }
 
-            SlidingButtonSelector(
-                options = options,
-                selectedIndex = selected,
-                onOptionSelected = { selected = it }
-            )
+                SlidingButtonSelector(
+                    options = options,
+                    selectedIndex = selected,
+                    onOptionSelected = { selected = it }
+                )
 
-            // Back button
-            Text(
-                text = stringResource(id = R.string.back),
-                fontFamily = FontFamily(Font(R.font.nokia_font)),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = LightGreen,
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .clickable {
-                        vibrate(context)
-                        // Set restoring state flag to prevent sound
-                        gameViewModel.setRestoringState(true)
-                        // Only pause if the game wasn't already over
-                        if (!gameViewModel.state.value.isGameOver) {
-                            gameViewModel.pauseGame()
+                // Back button
+                Text(
+                    text = stringResource(id = R.string.back),
+                    fontFamily = FontFamily(Font(R.font.nokia_font)),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = LightGreen,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .clickable {
+                            vibrate(context)
+                            // Set restoring state flag to prevent sound
+                            gameViewModel.setRestoringState(true)
+                            // Only pause if the game wasn't already over
+                            if (!gameViewModel.state.value.isGameOver) {
+                                gameViewModel.pauseGame()
+                            }
+                            navController.popBackStack() // Go back to the previous screen
                         }
-                        navController.popBackStack() // Go back to the previous screen
-                    }
-                    .padding(8.dp)
-                    .background(Color.Black)
-                    .padding(horizontal = 32.dp, vertical = 8.dp),
-                textAlign = TextAlign.Center
-            )
+                        .padding(8.dp)
+                        .background(Color.Black)
+                        .padding(horizontal = 32.dp, vertical = 8.dp),
+                    textAlign = TextAlign.Center
+                )
 
-            // Clear button
-            Text(
-                text = stringResource(id = R.string.clear),
-                fontFamily = FontFamily(Font(R.font.nokia_font)),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = LightGreen,
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .clickable {
-                        vibrate(context)
-                        viewModel.clearAllRecords()
-                        navController.popBackStack() // Go back to the previous screen
-                    }
-                    .padding(8.dp)
-                    .background(Color.Black)
-                    .padding(horizontal = 32.dp, vertical = 8.dp),
-                textAlign = TextAlign.Center
-            )
+                // Clear button
+                Text(
+                    text = stringResource(id = R.string.clear),
+                    fontFamily = FontFamily(Font(R.font.nokia_font)),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = LightGreen,
+                    modifier = Modifier
+                        .clickable {
+                            vibrate(context)
+                            viewModel.clearAllRecords()
+                            navController.popBackStack() // Go back to the previous screen
+                        }
+                        .padding(8.dp)
+                        .background(Color.Black)
+                        .padding(horizontal = 32.dp, vertical = 8.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
@@ -186,7 +193,7 @@ fun HighScoreTable(highScores: List<HighScore>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(400.dp)
+            .height(300.dp)
             .border(2.dp, color = Color.Black)
     ) {
         // Table header
@@ -198,7 +205,7 @@ fun HighScoreTable(highScores: List<HighScore>) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                "Name",
+                stringResource(id = R.string.name),
                 Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 color = LightGreen,
@@ -206,7 +213,7 @@ fun HighScoreTable(highScores: List<HighScore>) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                "Score",
+                stringResource(id = R.string.score),
                 Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 color = LightGreen,
@@ -215,9 +222,10 @@ fun HighScoreTable(highScores: List<HighScore>) {
             )
             if (highScores.isNotEmpty() && highScores[0].maxSpeedReached != null) {
                 Text(
-                    "Max Speed",
+                    stringResource(id = R.string.max_speed),
                     Modifier.weight(1f),
                     textAlign = TextAlign.Center,
+                    maxLines = 1,
                     color = LightGreen,
                     fontFamily = FontFamily(Font(R.font.nokia_font)),
                     fontWeight = FontWeight.Bold
@@ -226,7 +234,7 @@ fun HighScoreTable(highScores: List<HighScore>) {
 
             if (highScores.isNotEmpty() && highScores[0].wallsLevel != null) {
                 Text(
-                    "Level",
+                    stringResource(id = R.string.level),
                     Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                     color = LightGreen,
@@ -291,6 +299,7 @@ fun HighScoreTable(highScores: List<HighScore>) {
     }
 }
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun SlidingButtonSelector(
     options: List<String>,

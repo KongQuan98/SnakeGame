@@ -1,6 +1,7 @@
 package com.example.snakegame.presentation.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,7 +28,7 @@ import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 import kotlin.system.exitProcess
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(initialRoute: String? = null) {
     val navController = rememberNavController()
 
     val settingsViewModel: SettingsViewModel = hiltViewModel()
@@ -35,7 +36,6 @@ fun AppNavigation() {
     val vibrationEnabled by settingsViewModel.vibrationEnabled.observeAsState(initial = true)
     val musicEnabled by settingsViewModel.musicEnabled.observeAsState(initial = true)
     val buttonType by settingsViewModel.buttonType.observeAsState(initial = ButtonTypeEnum.ARROW_BUTTON)
-    val language by settingsViewModel.language.observeAsState(initial = "en")
 
     val settings = Settings(
         snakeSpeed,
@@ -44,6 +44,14 @@ fun AppNavigation() {
     )
 
     VibrationManager.isSettingVibrationEnabled = vibrationEnabled
+
+    LaunchedEffect(initialRoute) {
+        initialRoute?.let {
+            navController.navigate(it) {
+                popUpTo("main_menu") { inclusive = true }
+            }
+        }
+    }
 
     NavHost(navController = navController, startDestination = "main_menu") {
         // Main Menu Screen

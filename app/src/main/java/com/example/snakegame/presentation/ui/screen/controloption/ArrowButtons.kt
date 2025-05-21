@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.snakegame.presentation.ui.theme.LightGreen
@@ -26,8 +27,10 @@ import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
 
 @Composable
 fun ArrowButtons(modifier: Modifier = Modifier, onDirectionChange: (Pair<Int, Int>) -> Unit) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
     val buttonSize = Modifier
-        .size(64.dp)
+        .size(screenWidth * 0.15f) // 15% of screen width
     val context = LocalContext.current
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.padding(24.dp)) {
         Button(

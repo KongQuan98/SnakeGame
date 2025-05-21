@@ -18,13 +18,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -37,6 +36,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -85,7 +85,6 @@ fun Snake(
     val showHighScoreDialog = remember { mutableStateOf(false) }
 
     // highscore check
-    val highScores = remember { mutableIntStateOf(0) }
     val highScoreViewModel: HighScoreViewModel = hiltViewModel()
 
     // Observe game state to detect when the game is over
@@ -125,8 +124,10 @@ fun Snake(
                 // Show SaveHighScoreDialog only if current score is greater than high score
                 if (showHighScoreDialog.value) {
                     SaveHighScoreDialog(
-                        title = "Too bad!",
-                        subtitle = "Your score is ${state.value?.score ?: 0}, save now?",
+                        title = stringResource(id = R.string.too_bad),
+                        subtitle = "${stringResource(id = R.string.your_score_is)} " +
+                                "${state.value?.score ?: 0}, " +
+                                "${stringResource(id = R.string.save_now)}?",
                         onSubmit = { name ->
                             highScoreViewModel.addHighScore(
                                 name = name,
@@ -219,7 +220,7 @@ fun Score(state: State, gameType: GameTypeEnum) {
         )
     ) {
         Text(
-            text = "Score: ${state.score}",
+            text = "${stringResource(id = R.string.score)}: ${state.score}",
             fontFamily = FontFamily(
                 Font(R.font.nokia_font)
             ),
@@ -229,7 +230,11 @@ fun Score(state: State, gameType: GameTypeEnum) {
         // show speed number for speed mode
         if (gameType == GameTypeEnum.SNAKE_GAME_SPEED) {
             Text(
-                text = "Speed: ${calculateSpeedKmPerHour(delayMillis = state.speed)} km/hr",
+                text = "${stringResource(id = R.string.speed)}: ${
+                    calculateSpeedKmPerHour(
+                        delayMillis = state.speed
+                    )
+                } km/hr",
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
                 ),
@@ -353,7 +358,7 @@ fun BonusCountdownBar(foodSpawnTime: Long, isBonusActive: Boolean) {
             )
         }
     } else {
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp),

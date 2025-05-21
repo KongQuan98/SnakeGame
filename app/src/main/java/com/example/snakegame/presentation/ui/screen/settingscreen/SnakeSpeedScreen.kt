@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,11 +42,11 @@ fun SnakeSpeedScreen(navController: NavController) {
     var selectedSpeed by remember { mutableLongStateOf(150L) }
 
     val menuOptions = listOf(
-        "Super slow" to 200L,
-        "Slow" to 180L,
-        "Medium (Recommended)" to 150L,
-        "Fast" to 110L,
-        "Super fast" to 70L,
+        stringResource(id = R.string.super_slow) to 200L,
+        stringResource(id = R.string.slow) to 180L,
+        stringResource(id = R.string.medium) to 150L,
+        stringResource(id = R.string.fast) to 110L,
+        stringResource(id = R.string.super_fast) to 70L,
     )
     val context = LocalContext.current
 
@@ -73,7 +74,7 @@ fun SnakeSpeedScreen(navController: NavController) {
         ) {
             // Title
             Text(
-                text = "Snake Speed",
+                text = stringResource(id = R.string.snake_speed),
                 color = Color.Black,
                 fontFamily = FontFamily(
                     Font(R.font.nokia_font)
@@ -100,7 +101,7 @@ fun SnakeSpeedScreen(navController: NavController) {
                                 viewModel.updateSnakeSpeed(speed)
                                 Toast.makeText(
                                     context,
-                                    "${menuOptions[selectedIndex].first} is selected",
+                                    "${menuOptions[selectedIndex].first} ${context.getString(R.string.is_selected)}",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -110,7 +111,7 @@ fun SnakeSpeedScreen(navController: NavController) {
             }
 
             Text(
-                text = "Done",
+                text = stringResource(id = R.string.done),
                 fontFamily = FontFamily(Font(R.font.nokia_font)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
