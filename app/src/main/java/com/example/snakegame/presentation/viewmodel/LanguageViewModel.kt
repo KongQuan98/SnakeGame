@@ -27,7 +27,7 @@ class LanguageViewModel @Inject constructor(
 
             // Recreate the activity and navigate to settings screen
             val intent = Intent(context, MainMenuActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             context.startActivity(intent)
         }

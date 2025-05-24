@@ -17,13 +17,14 @@ import com.example.snakegame.presentation.ui.screen.HighScoreScreen
 import com.example.snakegame.presentation.ui.screen.MainMenu
 import com.example.snakegame.presentation.ui.screen.Snake
 import com.example.snakegame.presentation.ui.screen.SpecialModeScreen
+import com.example.snakegame.presentation.ui.screen.SplashScreen
 import com.example.snakegame.presentation.ui.screen.WallsSelectionScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.ButtonTypeScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.LanguageScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.MusicVibrationControlScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.SettingScreen
 import com.example.snakegame.presentation.ui.screen.settingscreen.SnakeSpeedScreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager
+import com.example.snakegame.presentation.utility.VibrationManager
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 import kotlin.system.exitProcess
 
@@ -53,7 +54,12 @@ fun AppNavigation(initialRoute: String? = null) {
         }
     }
 
-    NavHost(navController = navController, startDestination = "main_menu") {
+    NavHost(navController = navController, startDestination = "splash_screen") {
+        // Main Menu Screen
+        composable("splash_screen") {
+            SplashScreen(navController)
+        }
+
         // Main Menu Screen
         composable("main_menu") {
             MainMenu(navController)

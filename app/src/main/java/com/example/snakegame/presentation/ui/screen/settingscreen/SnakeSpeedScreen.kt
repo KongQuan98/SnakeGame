@@ -33,7 +33,8 @@ import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.screen.MenuOption
 import com.example.snakegame.presentation.ui.screen.SnakeAnimation
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.ClickDebouncer
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable
@@ -70,10 +71,12 @@ fun SnakeSpeedScreen(navController: NavController) {
         SnakeAnimation()
 
         Column(
+            modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Title
             Text(
+                textAlign = TextAlign.Center,
                 text = stringResource(id = R.string.snake_speed),
                 color = Color.Black,
                 fontFamily = FontFamily(
@@ -81,6 +84,7 @@ fun SnakeSpeedScreen(navController: NavController) {
                 ),
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
+                lineHeight = 45.sp
             )
 
             Column(
@@ -119,8 +123,10 @@ fun SnakeSpeedScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .clickable {
-                        vibrate(context)
-                        navController.popBackStack() // Go back to the previous screen
+                        if (ClickDebouncer.canClick()) {
+                            vibrate(context)
+                            navController.popBackStack() // Go back to the previous screen
+                        }
                     }
                     .padding(8.dp)
                     .background(Color.Black)

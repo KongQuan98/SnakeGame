@@ -50,7 +50,7 @@ import com.example.snakegame.presentation.ui.screen.controloption.ArrowButtons
 import com.example.snakegame.presentation.ui.screen.controloption.Joystick
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.calculateSpeedKmPerHour
+import com.example.snakegame.presentation.utility.calculateSpeedKmPerHour
 import com.example.snakegame.presentation.viewmodel.GameLogicViewModel
 import com.example.snakegame.presentation.viewmodel.HighScoreViewModel
 import kotlinx.coroutines.delay
@@ -216,7 +216,9 @@ fun Score(state: State, gameType: GameTypeEnum) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.padding(
             top = 40.dp,
-            bottom = 20.dp
+            bottom = 20.dp,
+            start = 16.dp,
+            end = 16.dp
         )
     ) {
         Text(
@@ -230,6 +232,7 @@ fun Score(state: State, gameType: GameTypeEnum) {
         // show speed number for speed mode
         if (gameType == GameTypeEnum.SNAKE_GAME_SPEED) {
             Text(
+                maxLines = 1,
                 text = "${stringResource(id = R.string.speed)}: ${
                     calculateSpeedKmPerHour(
                         delayMillis = state.speed

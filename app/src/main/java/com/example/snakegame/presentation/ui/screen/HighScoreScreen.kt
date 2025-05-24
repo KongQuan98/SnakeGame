@@ -47,7 +47,8 @@ import com.example.snakegame.R
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.ClickDebouncer
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.GameLogicViewModel
 import com.example.snakegame.presentation.viewmodel.HighScoreViewModel
 
@@ -150,14 +151,16 @@ fun HighScoreScreen(navController: NavController, gameMode: GameTypeEnum) {
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .clickable {
-                            vibrate(context)
-                            // Set restoring state flag to prevent sound
-                            gameViewModel.setRestoringState(true)
-                            // Only pause if the game wasn't already over
-                            if (!gameViewModel.state.value.isGameOver) {
-                                gameViewModel.pauseGame()
+                            if (ClickDebouncer.canClick()) {
+                                vibrate(context)
+                                // Set restoring state flag to prevent sound
+                                gameViewModel.setRestoringState(true)
+                                // Only pause if the game wasn't already over
+                                if (!gameViewModel.state.value.isGameOver) {
+                                    gameViewModel.pauseGame()
+                                }
+                                navController.popBackStack() // Go back to the previous screen
                             }
-                            navController.popBackStack() // Go back to the previous screen
                         }
                         .padding(8.dp)
                         .background(Color.Black)
@@ -174,9 +177,11 @@ fun HighScoreScreen(navController: NavController, gameMode: GameTypeEnum) {
                     color = LightGreen,
                     modifier = Modifier
                         .clickable {
-                            vibrate(context)
-                            viewModel.clearAllRecords()
-                            navController.popBackStack() // Go back to the previous screen
+                            if (ClickDebouncer.canClick()) {
+                                vibrate(context)
+                                viewModel.clearAllRecords()
+                                navController.popBackStack() // Go back to the previous screen
+                            }
                         }
                         .padding(8.dp)
                         .background(Color.Black)
@@ -310,6 +315,7 @@ fun SlidingButtonSelector(
         modifier = Modifier
             .fillMaxWidth()
             .height(40.dp)
+            .padding(vertical = 8.dp)
             .background(LightGreen)
     ) {
         val totalWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
@@ -335,7 +341,11 @@ fun SlidingButtonSelector(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .clickable { onOptionSelected(index) },
+                        .clickable {
+                            if (ClickDebouncer.canClick()) {
+                                onOptionSelected(index)
+                            }
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(

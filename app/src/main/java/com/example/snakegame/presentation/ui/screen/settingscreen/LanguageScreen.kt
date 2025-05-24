@@ -29,7 +29,8 @@ import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.screen.MenuOption
 import com.example.snakegame.presentation.ui.screen.SnakeAnimation
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.ClickDebouncer
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.LanguageViewModel
 
 @Composable
@@ -100,8 +101,10 @@ fun LanguageScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .clickable {
-                        vibrate(context)
-                        navController.popBackStack()
+                        if (ClickDebouncer.canClick()) {
+                            vibrate(context)
+                            navController.popBackStack()
+                        }
                     }
                     .padding(8.dp)
                     .background(Color.Black)

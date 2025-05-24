@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 
 @Composable
 fun SaveHighScoreDialog(
@@ -138,6 +138,7 @@ fun SaveHighScoreDialog(
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
+                        textAlign = TextAlign.Center,
                         text = stringResource(id = R.string.no_thanks),
                         fontFamily = FontFamily(
                             Font(R.font.nokia_font)

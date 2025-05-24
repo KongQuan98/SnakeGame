@@ -20,7 +20,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.snakegame.R
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 
 @Composable
 fun GameOverDialog(
@@ -79,7 +79,8 @@ fun GameOverDialog(
                             vibrate(context)
                         },
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                     ) {
                         Text(
@@ -99,7 +100,8 @@ fun GameOverDialog(
                         vibrate(context)
                     },
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
@@ -122,7 +124,8 @@ fun GameOverDialog(
                             vibrate(context)
                         },
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                     ) {
                         Text(
@@ -144,7 +147,8 @@ fun GameOverDialog(
                         vibrate(context)
                     },
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(
@@ -164,7 +168,8 @@ fun GameOverDialog(
                         vibrate(context)
                     },
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
                 ) {
                     Text(

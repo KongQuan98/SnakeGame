@@ -1,4 +1,4 @@
-package com.example.snakegame.presentation.ui.utility
+package com.example.snakegame.presentation.utility
 
 import com.example.snakegame.presentation.ui.screen.GameLogic
 

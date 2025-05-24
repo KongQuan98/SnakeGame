@@ -1,4 +1,4 @@
-package com.example.snakegame.presentation.ui.utility
+package com.example.snakegame.presentation.utility
 
 import android.content.Context
 import android.os.VibrationEffect

@@ -1,12 +1,12 @@
 package com.example.snakegame.presentation.ui.screen
 
-import SoundManager
 import android.content.Context
 import com.example.snakegame.presentation.datamodel.GameTypeEnum
 import com.example.snakegame.presentation.datamodel.Settings
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
-import com.example.snakegame.presentation.ui.utility.generateRandomFood
-import com.example.snakegame.presentation.ui.utility.generateWallsForMaze
+import com.example.snakegame.presentation.utility.SoundManager
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.generateRandomFood
+import com.example.snakegame.presentation.utility.generateWallsForMaze
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -248,7 +248,7 @@ class GameLogic(
     }
 
     private var lastChangeTime: Long = 0
-    private val coolDownTime: Long = 100 // milliseconds
+    private val coolDownTime: Long = 75 // milliseconds
 
     fun changeDirection(newMove: Pair<Int, Int>, isPaused: Boolean) {
         scope.launch {

@@ -6,11 +6,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,13 +42,15 @@ import com.example.snakegame.presentation.ui.screen.controloption.ArrowButtons
 import com.example.snakegame.presentation.ui.screen.controloption.Joystick
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.ClickDebouncer
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable
 fun ButtonTypeScreen(navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
     var selectedButtonType by remember { mutableStateOf(ButtonTypeEnum.ARROW_BUTTON) }
+    val scrollState = rememberScrollState()
 
     val menuOptions = listOf(
         stringResource(id = R.string.arrow_button) to ButtonTypeEnum.ARROW_BUTTON,
@@ -74,6 +78,9 @@ fun ButtonTypeScreen(navController: NavController) {
         SnakeAnimation()
 
         Column(
+            modifier = Modifier
+                .verticalScroll(scrollState)
+                .padding(top = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Title
@@ -93,8 +100,7 @@ fun ButtonTypeScreen(navController: NavController) {
             Box(
                 Modifier
                     .padding(start = 40.dp, end = 40.dp, top = 10.dp, bottom = 10.dp)
-                    .fillMaxHeight(0.4f)
-                    .fillMaxWidth()
+                    .wrapContentHeight()
                     .width(300.dp)
                     .background(DarkGreen)
             ) {
@@ -103,7 +109,7 @@ fun ButtonTypeScreen(navController: NavController) {
                         Unit
                     }
 
-                    ButtonTypeEnum.JOYSTICK -> Joystick {
+                    ButtonTypeEnum.JOYSTICK -> Joystick(Modifier.height(250.dp)) {
                         Unit
                     }
                 }
@@ -146,8 +152,10 @@ fun ButtonTypeScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .clickable {
-                        vibrate(context)
-                        navController.popBackStack()
+                        if (ClickDebouncer.canClick()) {
+                            vibrate(context)
+                            navController.popBackStack()
+                        }
                     }
                     .padding(8.dp)
                     .background(Color.Black)

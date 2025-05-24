@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 
 
 @Composable
@@ -30,7 +30,7 @@ fun ArrowButtons(modifier: Modifier = Modifier, onDirectionChange: (Pair<Int, In
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val buttonSize = Modifier
-        .size(screenWidth * 0.15f) // 15% of screen width
+        .size(screenWidth * 0.18f) // 15% of screen width
     val context = LocalContext.current
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.padding(24.dp)) {
         Button(

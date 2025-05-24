@@ -36,7 +36,8 @@ import com.example.snakegame.R
 import com.example.snakegame.presentation.datamodel.MusicVibrationEnum
 import com.example.snakegame.presentation.ui.screen.SnakeAnimation
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.ClickDebouncer
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.SettingsViewModel
 
 @Composable
@@ -99,41 +100,45 @@ fun MusicVibrationControlScreen(navController: NavController) {
                             .background(if (isSelected) Color.Black else LightGreen)
                             .padding(8.dp)
                             .clickable(onClick = {
-                                vibrate(context)
-                                selectedIndex = index
-                                when (option) {
-                                    MusicVibrationEnum.MUSIC -> {
-                                        selectedMusicEnabled = !selectedMusicEnabled
-                                        viewModel.updateMusicEnabled(selectedMusicEnabled)
-                                        val onOff =
-                                            if (selectedMusicEnabled)
-                                                context.getString(R.string.on)
-                                            else
-                                                context.getString(R.string.off)
-                                        Toast
-                                            .makeText(
-                                                context,
-                                                "${context.getString(R.string.music_is_switched)} $onOff",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                            .show()
-                                    }
+                                if (ClickDebouncer.canClick()) {
+                                    vibrate(context)
+                                    selectedIndex = index
+                                    when (option) {
+                                        MusicVibrationEnum.MUSIC -> {
+                                            selectedMusicEnabled = !selectedMusicEnabled
+                                            viewModel.updateMusicEnabled(selectedMusicEnabled)
+                                            val onOff =
+                                                if (selectedMusicEnabled)
+                                                    context.getString(R.string.on)
+                                                else
+                                                    context.getString(R.string.off)
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "${context.getString(R.string.music_is_switched)} $onOff",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        }
 
-                                    MusicVibrationEnum.VIBRATION -> {
-                                        selectedVibrationEnabled = !selectedVibrationEnabled
-                                        viewModel.updateVibrationEnabled(selectedVibrationEnabled)
-                                        val onOff =
-                                            if (selectedVibrationEnabled)
-                                                context.getString(R.string.on)
-                                            else
-                                                context.getString(R.string.off)
-                                        Toast
-                                            .makeText(
-                                                context,
-                                                "${context.getString(R.string.vibration_is_switched)} $onOff",
-                                                Toast.LENGTH_SHORT
+                                        MusicVibrationEnum.VIBRATION -> {
+                                            selectedVibrationEnabled = !selectedVibrationEnabled
+                                            viewModel.updateVibrationEnabled(
+                                                selectedVibrationEnabled
                                             )
-                                            .show()
+                                            val onOff =
+                                                if (selectedVibrationEnabled)
+                                                    context.getString(R.string.on)
+                                                else
+                                                    context.getString(R.string.off)
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "${context.getString(R.string.vibration_is_switched)} $onOff",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        }
                                     }
                                 }
                             }),
@@ -192,8 +197,10 @@ fun MusicVibrationControlScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .clickable {
-                        vibrate(context)
-                        navController.popBackStack()
+                        if (ClickDebouncer.canClick()) {
+                            vibrate(context)
+                            navController.popBackStack()
+                        }
                     }
                     .padding(8.dp)
                     .background(Color.Black)

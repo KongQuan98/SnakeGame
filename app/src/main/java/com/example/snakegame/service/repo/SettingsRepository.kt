@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
-import com.example.snakegame.presentation.ui.utility.VibrationManager
+import com.example.snakegame.presentation.utility.VibrationManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

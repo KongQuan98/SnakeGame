@@ -28,7 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.snakegame.R
 import com.example.snakegame.presentation.ui.theme.LightGreen
-import com.example.snakegame.presentation.ui.utility.VibrationManager.vibrate
+import com.example.snakegame.presentation.utility.ClickDebouncer
+import com.example.snakegame.presentation.utility.VibrationManager.vibrate
 import com.example.snakegame.presentation.viewmodel.MenuStateViewModel
 
 @Composable
@@ -102,8 +103,10 @@ fun WallsSelectionScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .clickable {
-                        vibrate(context)
-                        navController.popBackStack() // Go back to the previous screen
+                        if (ClickDebouncer.canClick()) {
+                            vibrate(context)
+                            navController.popBackStack() // Go back to the previous screen
+                        }
                     }
                     .padding(8.dp)
                     .background(Color.Black)
