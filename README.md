@@ -1,61 +1,43 @@
 # Snake Game
 
-A modern Android implementation of the classic Snake game, built with Kotlin and Jetpack Compose.
+A modern implementation of the classic Snake game built for Android using Jetpack Compose.
 
-## Features
+## 🎮 Game Concept
 
-- 🎮 Classic Snake gameplay with smooth controls
-- 🏆 High score tracking system
-- ⚙️ Customizable game settings
-- 🎯 Special game modes
-- 🧱 Wall selection options
-- 🎨 Modern UI with Jetpack Compose
-- 📱 Responsive design for different screen sizes
+Snake is a classic arcade game where players control a snake that moves around the screen, eating
+food to grow longer while avoiding collisions with walls and itself. The game gets progressively
+more challenging as the snake grows longer, requiring quick reflexes and strategic planning.
 
-## Screens
+## ✨ Features
 
-1. **Main Menu**
-   - Start game
-   - Access high scores
-   - Open settings
-   - Special modes
+- Smooth touch controls with arrow buttons
+- Haptic feedback for better user interaction
+- Modern Material Design UI
+- Responsive layout that adapts to different screen sizes
+- Score tracking system
 
-2. **Game Screen**
-   - Smooth snake movement
-   - Food collection mechanics
-   - Score tracking
-   - Game over detection
+## 🛠️ Tech Stack
 
-3. **Settings Screen**
-   - Game customization options
-   - Control preferences
-   - Wall selection
+- **Kotlin** - Primary programming language
+- **Jetpack Compose** - Modern Android UI toolkit
+- **Material Design** - For consistent and beautiful UI components
+- **Hilt** - For dependency injection
+- **Android Architecture Components** - Following MVVM pattern
 
-4. **High Score Screen**
-   - Top scores display
-   - Score history
+## 🎯 Game Controls
 
-5. **Special Modes**
-   - Unique gameplay variations
-   - Challenging scenarios
+- Use the arrow buttons to control the snake's direction
+- The snake moves continuously in the selected direction
+- Collect food to grow longer
+- Avoid hitting the walls or the snake's own body
 
-## Technical Details
-
-- Built with Kotlin
-- Uses Jetpack Compose for UI
-- MVVM architecture
-- Clean code structure
-- Material Design 3 components
-
-## Getting Started
+## 🚀 Getting Started
 
 1. Clone the repository
 2. Open the project in Android Studio
-3. Build and run the app on an Android device or emulator
+3. Build and run the application on your Android device or emulator
 
-## Requirements
+## 📱 Requirements
 
-- Android Studio
-- Android SDK
-- Kotlin
-- Gradle
+- Android 5.0 (API level 21) or higher
+- Android Studio Arctic Fox or newer

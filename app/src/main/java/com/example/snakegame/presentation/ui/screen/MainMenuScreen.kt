@@ -148,6 +148,7 @@ fun SnakeAnimation() {
 
     // Animation for the snake moving
     LaunchedEffect(Unit) {
+        delay(100)
         // Initialize the snake position along the top edge
         snakePositions.addAll(fullPath.take(snakeLength))
 
