@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import com.example.snakegame.presentation.ui.theme.DarkGreen
 import com.example.snakegame.presentation.ui.theme.LightGreen
 import kotlin.math.abs
@@ -32,55 +34,50 @@ import kotlin.math.min
 @Composable
 fun Joystick(
     modifier: Modifier = Modifier,
+    sizeDp: Float = 150f, // New parameter
     onDirectionChange: (Pair<Int, Int>) -> Unit
 ) {
-    // Offset of the joystick's hat relative to the center.
     var joystickOffset by remember { mutableStateOf(Offset.Zero) }
-    // Size of the joystick container.
     var sizeState by remember { mutableStateOf(IntSize.Zero) }
 
     Box(
         modifier = modifier
+            .size(sizeDp.dp) // Use the sizeDp here
             .onSizeChanged { sizeState = it }
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDrag = { _, dragAmount ->
-                        // Calculate new offset based on drag amount.
                         val newOffset = joystickOffset + dragAmount
-                        // Determine the maximum allowed offset (radius of the base).
                         val maxRadius = min(sizeState.width, sizeState.height) / 3f
                         val distance = newOffset.getDistance()
 
-                        // Clamp the offset so the hat doesn't leave the base circle.
                         joystickOffset = if (distance <= maxRadius) {
                             newOffset
                         } else {
                             newOffset * (maxRadius / distance)
                         }
 
-                        // Normalize the offset values.
                         val normX = joystickOffset.x / maxRadius
                         val normY = joystickOffset.y / maxRadius
 
-                        // Use a threshold to decide when to trigger a directional change.
                         val threshold = 0.5f
                         val direction = if (abs(normX) > abs(normY)) {
                             when {
-                                normX > threshold -> Pair(1, 0)   // Right
-                                normX < -threshold -> Pair(-1, 0) // Left
+                                normX > threshold -> Pair(1, 0)
+                                normX < -threshold -> Pair(-1, 0)
                                 else -> Pair(0, 0)
                             }
                         } else {
                             when {
-                                normY > threshold -> Pair(0, 1)   // Down
-                                normY < -threshold -> Pair(0, -1) // Up
+                                normY > threshold -> Pair(0, 1)
+                                normY < -threshold -> Pair(0, -1)
                                 else -> Pair(0, 0)
                             }
                         }
+
                         onDirectionChange(direction)
                     },
                     onDragEnd = {
-                        // Reset the joystick when drag ends.
                         joystickOffset = Offset.Zero
                         onDirectionChange(Pair(0, 0))
                     },
@@ -91,7 +88,6 @@ fun Joystick(
                 )
             }
     ) {
-        // Draw the joystick on a Canvas.
         Canvas(modifier = Modifier.fillMaxSize()) {
             val canvasWidth = size.width
             val canvasHeight = size.height
@@ -99,14 +95,11 @@ fun Joystick(
             val baseRadius = min(canvasWidth, canvasHeight) / 3f
             val hatRadius = min(canvasWidth, canvasHeight) / 6f
 
-            // Draw the base (background circle).
             drawCircle(
                 color = LightGreen,
                 radius = baseRadius,
                 center = center
             )
-
-            // Draw the movable hat.
             drawCircle(
                 color = DarkGreen,
                 radius = hatRadius,

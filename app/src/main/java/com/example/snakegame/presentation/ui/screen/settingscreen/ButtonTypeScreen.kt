@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -60,6 +61,8 @@ fun ButtonTypeScreen(navController: NavController) {
 
     val viewModel: SettingsViewModel = hiltViewModel()
     val buttonType by viewModel.buttonType.observeAsState(initial = ButtonTypeEnum.ARROW_BUTTON)
+    val joyStickSize by viewModel.joyStickSize.observeAsState(initial = 150f)
+
     selectedButtonType = buttonType
 
     menuOptions.forEachIndexed { index, pair ->
@@ -109,9 +112,31 @@ fun ButtonTypeScreen(navController: NavController) {
                         Unit
                     }
 
-                    ButtonTypeEnum.JOYSTICK -> Joystick(Modifier.height(250.dp)) {
+                    ButtonTypeEnum.JOYSTICK -> Joystick(
+                        Modifier
+                            .height(250.dp)
+                            .align(Alignment.Center),
+                        sizeDp = joyStickSize
+                    ) {
                         Unit
                     }
+                }
+            }
+
+            when (selectedButtonType) {
+                ButtonTypeEnum.ARROW_BUTTON -> {
+                    /* Nothing for now **/
+                }
+
+                else -> {
+                    Slider(
+                        value = joyStickSize,
+                        onValueChange = {
+                            viewModel.updateJoyStickSize(it)
+                        },
+                        valueRange = 100f..300f,
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 40.dp)
+                    )
                 }
             }
 
@@ -150,14 +175,13 @@ fun ButtonTypeScreen(navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 color = LightGreen,
                 modifier = Modifier
-                    .padding(top = 16.dp)
                     .clickable {
                         if (ClickDebouncer.canClick()) {
+                            viewModel.updateJoyStickSize(joyStickSize)
                             vibrate(context)
                             navController.popBackStack()
                         }
                     }
-                    .padding(8.dp)
                     .background(Color.Black)
                     .padding(horizontal = 32.dp, vertical = 8.dp),
                 textAlign = TextAlign.Center

@@ -10,26 +10,25 @@ more challenging as the snake grows longer, requiring quick reflexes and strateg
 
 ## ✨ Features
 
-- Smooth touch controls with arrow buttons
-- Haptic feedback for better user interaction
-- Modern Material Design UI
-- Responsive layout that adapts to different screen sizes
+- Smooth touch controls with arrow buttons / joysticks
+- Modern Material Design UI to recreate the retro style of classic snake game
+- Multiple gameplay mode (Classic, Walls Challenge, Speed Challenge)
+- Customizable travel speed of snake
 - Score tracking system
+- Supports three languages (Chinese, English, Malay)
 
 ## 🛠️ Tech Stack
 
 - **Kotlin** - Primary programming language
 - **Jetpack Compose** - Modern Android UI toolkit
-- **Material Design** - For consistent and beautiful UI components
-- **Hilt** - For dependency injection
 - **Android Architecture Components** - Following MVVM pattern
 
 ## 🎯 Game Controls
 
-- Use the arrow buttons to control the snake's direction
+- Use the arrow buttons / joy stick to control the snake's direction
 - The snake moves continuously in the selected direction
-- Collect food to grow longer
-- Avoid hitting the walls or the snake's own body
+- Collect food to grow longer and get more points
+- Avoid hitting the walls or the snake's own body (For walls challenge)
 
 ## 🚀 Getting Started
 

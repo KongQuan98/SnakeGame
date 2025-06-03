@@ -60,7 +60,7 @@ fun Snake(
     settings: Settings,
     gameType: GameTypeEnum,
     navController: NavController? = null,
-    buttonType: ButtonTypeEnum = ButtonTypeEnum.ARROW_BUTTON,
+    buttonType: Pair<ButtonTypeEnum, Float> = (ButtonTypeEnum.ARROW_BUTTON to 0f),
     level: Int = 0
 ) {
     val viewModel: GameLogicViewModel = hiltViewModel()
@@ -197,12 +197,12 @@ fun Snake(
             }
 
             // game control button type
-            when (buttonType) {
+            when (buttonType.first) {
                 ButtonTypeEnum.ARROW_BUTTON -> ArrowButtons {
                     gameLogic.changeDirection(it, isPaused.value)
                 }
 
-                ButtonTypeEnum.JOYSTICK -> Joystick {
+                ButtonTypeEnum.JOYSTICK -> Joystick(sizeDp = buttonType.second) {
                     gameLogic.changeDirection(it, isPaused.value)
                 }
             }

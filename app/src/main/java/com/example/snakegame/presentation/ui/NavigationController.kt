@@ -37,6 +37,9 @@ fun AppNavigation(initialRoute: String? = null) {
     val vibrationEnabled by settingsViewModel.vibrationEnabled.observeAsState(initial = true)
     val musicEnabled by settingsViewModel.musicEnabled.observeAsState(initial = true)
     val buttonType by settingsViewModel.buttonType.observeAsState(initial = ButtonTypeEnum.ARROW_BUTTON)
+    val joyStickSize by settingsViewModel.joyStickSize.observeAsState(initial = 150f)
+
+    val buttonTypePair = (buttonType to joyStickSize)
 
     val settings = Settings(
         snakeSpeed,
@@ -71,7 +74,7 @@ fun AppNavigation(initialRoute: String? = null) {
                 settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_CLASSIC,
                 navController = navController,
-                buttonType = buttonType
+                buttonType = buttonTypePair
             )
         }
 
@@ -129,7 +132,7 @@ fun AppNavigation(initialRoute: String? = null) {
                 settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_WALLS,
                 navController = navController,
-                buttonType = buttonType,
+                buttonType = buttonTypePair,
                 level = level
             )
         }
@@ -139,7 +142,7 @@ fun AppNavigation(initialRoute: String? = null) {
                 settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_MAZE,
                 navController = navController,
-                buttonType = buttonType
+                buttonType = buttonTypePair
             )
         }
 
@@ -148,7 +151,7 @@ fun AppNavigation(initialRoute: String? = null) {
                 settings = settings,
                 gameType = GameTypeEnum.SNAKE_GAME_SPEED,
                 navController = navController,
-                buttonType = buttonType
+                buttonType = buttonTypePair
             )
         }
     }

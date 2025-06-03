@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.snakegame.presentation.datamodel.ButtonTypeEnum
@@ -24,6 +25,7 @@ class SettingsRepository @Inject constructor(
         val MUSIC = booleanPreferencesKey("music_enabled")
         val LANGUAGE = stringPreferencesKey("language")
         val BUTTON_TYPE = stringPreferencesKey("button_type")
+        val JOYSTICK_SIZE = floatPreferencesKey("joystick_size")
     }
 
     val snakeSpeed: Flow<Long> = dataStore.data.map { preferences ->
@@ -46,6 +48,12 @@ class SettingsRepository @Inject constructor(
         val buttonType =
             preferences[PreferencesKeys.BUTTON_TYPE] ?: ButtonTypeEnum.ARROW_BUTTON.name
         ButtonTypeEnum.valueOf(buttonType)
+    }
+
+    val joystickSize: Flow<Float> = dataStore.data.map { preferences ->
+        val value = preferences[PreferencesKeys.JOYSTICK_SIZE] ?: 150f
+        android.util.Log.d("SettingsRepository", "Reading joystick size: $value")
+        value
     }
 
     suspend fun updateSnakeSpeed(speed: Long) {
@@ -76,6 +84,13 @@ class SettingsRepository @Inject constructor(
     suspend fun updateButtonType(buttonType: ButtonTypeEnum) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.BUTTON_TYPE] = buttonType.name
+        }
+    }
+
+    suspend fun updateJoyStickSize(joyStickSize: Float) {
+        android.util.Log.d("SettingsRepository", "Writing joystick size: $joyStickSize")
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.JOYSTICK_SIZE] = joyStickSize
         }
     }
 }

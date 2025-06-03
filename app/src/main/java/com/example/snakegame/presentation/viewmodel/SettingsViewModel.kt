@@ -1,5 +1,6 @@
 package com.example.snakegame.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,6 +20,9 @@ class SettingsViewModel @Inject constructor(
     val musicEnabled = repository.musicEnabled.asLiveData()
     val language = repository.language.asLiveData()
     val buttonType = repository.buttonType.asLiveData()
+    val joyStickSize = repository.joystickSize.asLiveData().also {
+        Log.d("SettingsViewModel", "Observing joystick size changes")
+    }
 
     fun updateSnakeSpeed(speed: Long) {
         viewModelScope.launch {
@@ -47,6 +51,13 @@ class SettingsViewModel @Inject constructor(
     fun updateButtonType(buttonType: ButtonTypeEnum) {
         viewModelScope.launch {
             repository.updateButtonType(buttonType)
+        }
+    }
+
+    fun updateJoyStickSize(joyStickSize: Float) {
+        Log.d("SettingsViewModel", "Updating joystick size to: $joyStickSize")
+        viewModelScope.launch {
+            repository.updateJoyStickSize(joyStickSize)
         }
     }
 }
